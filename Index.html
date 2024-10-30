@@ -56,11 +56,19 @@
             font-size: 25px;
             padding: 10px;
             font-weight: 600;
+            position:relative;
         }
 
         .config-container {
             border: 5px solid black;
             height: 100%;
+        }
+
+        .button-container button i {
+            float:left;
+            position:absolute;
+            left:0;
+            margin-left:10px;
         }
 
         .w3-container.w3-half {
@@ -139,8 +147,16 @@
     <div class="w3-container w3-half">
         <h1 id="menuLogo">LOGO</h1>
         <div class="w3-container button-container">
-            <button id="menuPlayButton">BUTTON / OPTION 1</button>
-            <button id="menuConfigButton">BUTTON / OPTION 2</button>
+
+            <button id="menuPlayButton">
+            <i class="ri-play-fill"></i>
+            <span>START GAME</span>
+            </button>
+
+            <button id="menuConfigButton">
+            <i style = "font-weight:100" class="ri-file-chart-2-fill"></i>
+            <span>VIEW DATA</span>
+            </button>
         </div>
     </div>
     <div class="w3-container w3-half">
