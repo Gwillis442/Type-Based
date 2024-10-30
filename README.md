@@ -7,4 +7,4 @@ Version 1.0 approved
 # Kevin Tieu
 # Tye Maynard
 
-Update October 30, 2024
+Updated October 30, 2024
