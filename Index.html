@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.5.0/remixicon.css"
+        integrity="sha512-6p+GTq7fjTHD/sdFPWHaFoALKeWOU9f9MPBoPnvJEWBkGS4PKVVbCpMps6IXnTiXghFbxlgDE8QRHc3MU91lJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: 'Lexend Deca', Arial, Helvetica, sans-serif;
+            background-color: #f2f3f5;
+            overflow:hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        a,
+        button {
+            font-family: 'Lexend Deca', sans-serif;
+        }
+
+        #menuLogo {
+            font-size: 150px;
+            margin: 10px;
+            margin-top: 50px;
+            font-family: 'Lexend Deca', sans-serif;
+        }
+
+        .button-container {
+            margin-top: 50px;
+        }
+
+        .button-container button {
+            width: 100%;
+            margin: 10px 0 0 0;
+            background-color: transparent;
+            color: black;
+            border: 5px solid black;
+            cursor: pointer;
+            font-size: 25px;
+            padding: 10px;
+            font-weight: 600;
+        }
+
+        .config-container {
+            border: 5px solid black;
+            height: 100%;
+        }
+
+        .w3-container.w3-half {
+            height: 100%;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            height: 100%;
+        }
+
+        table tr td {
+            padding: 10px;
+            margin: 0px;
+
+        }
+
+        table tr td i {
+            font-size: 17.5px;
+            vertical-align: middle;
+        }
+
+        table tr td span {
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        table tr td p {
+            font-size: 12.5px;
+            margin: 0;
+            color: #7a7a7a;
+            display: inline;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #dfe3e8;
+        }
+
+        table tr:nth-child(even) .w3-blurb {
+            background-color: #ced4db;
+            margin-top: 10px;
+            padding: 7.5px;
+            line-height: normal;
+            padding-bottom: 10px;
+        }
+
+        table tr:nth-child(even) .w3-blurb i {
+            color: #7a7a7a;
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        table tr:nth-child(odd) .w3-blurb {
+            background-color: #dfe3e8;
+            margin-top: 10px;
+            padding: 7.5px;
+            line-height: normal;
+            padding-bottom: 10px;
+        }
+
+        table tr:nth-child(odd) {
+            background-color: #ced4db;
+        }
+
+        td select {
+            float: right;
+            border: none;
+            padding: 2.5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w3-container w3-half">
+        <h1 id="menuLogo">LOGO</h1>
+        <div class="w3-container button-container">
+            <button id="menuPlayButton">BUTTON / OPTION 1</button>
+            <button id="menuConfigButton">BUTTON / OPTION 2</button>
+        </div>
+    </div>
+    <div class="w3-container w3-half">
+        <div class="w3-container config-container">
+            <h2>SETTINGS</h2>
+            <div class="w3-container">
+                <table CELLSPACING="0px">
+                    <tr>
+                        <td>
+                            <i class="ri-play-fill"></i>
+                            <span>Mode Select</span>
+                            <select name="sound" id="soundInput">
+                                <option value="easy">Easy</option>
+                                <option value="med">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i class="ri-volume-down-fill"></i>
+                            <span>Sound</span>
+                            <select name="sound" id="soundInput">
+                                <option value="true">Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <i class="ri-music-2-fill"></i>
+                            <span>Music</span>
+                            <select name="music" id="musicInput">
+                                <option value="true">Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i class="ri-history-fill" style="font-weight:900"></i>
+                            <span>Play History</span>
+                            <select name="music" id="musicInput">
+                                <option value="true">Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                            <br>
+                            <div class="w3-blurb">
+                                <i class="ri-information-line"></i>
+                                <p>Play History lets you view past games and scores to track progress and improvement
+                                    over time.</p>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                </table>
+            </div>
+        </div>
+
+</html>
