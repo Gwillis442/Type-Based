@@ -1,3 +1,4 @@
+-- start Type-Based_Design.sql
 drop table typing_stats;
 drop table math_stats;
 drop table user_config;
@@ -13,14 +14,14 @@ CREATE TABLE user_profile(
 
 CREATE TABLE user_account(
     user_id VARCHAR2(8) PRIMARY KEY,
-    username VARCHAR2(50),
-    password VARCHAR2(50),
+    username VARCHAR2(20),
+    password VARCHAR2(20),
     FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
 );
 
 CREATE TABLE user_config(
     user_id VARCHAR2(8) PRIMARY KEY,
-    default_mode VARCHAR2(50),
+    default_mode VARCHAR2(5),
     sound int,
     music int,
     play_history int,
