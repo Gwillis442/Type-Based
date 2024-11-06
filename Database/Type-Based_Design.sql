@@ -15,7 +15,7 @@ CREATE TABLE user_profile(
 CREATE TABLE user_account(
     user_id VARCHAR2(8) PRIMARY KEY,
     username VARCHAR2(20),
-    password VARCHAR2(20),
+    password VARCHAR2(60),
     FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
 );
 
