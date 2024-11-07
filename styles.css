@@ -1,0 +1,133 @@
+            body,
+            html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                font-family: 'Lexend Deca', Arial, Helvetica, sans-serif;
+                background-color: #f2f3f5;
+                overflow: hidden;
+            }
+
+            body {
+                opacity: 0%;
+                transition: all 0.5s;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            p,
+            a,
+            button {
+                font-family: 'Lexend Deca', sans-serif;
+            }
+
+            #menuLogo {
+                font-size: 150px;
+                margin: 10px;
+                margin-top: 50px;
+                font-family: 'Lexend Deca', sans-serif;
+            }
+
+            .button-container {
+                margin-top: 50px;
+            }
+
+            .button-container button {
+                width: 100%;
+                margin: 10px 0 0 0;
+                background-color: transparent;
+                color: black;
+                border: 5px solid black;
+                cursor: pointer;
+                font-size: 25px;
+                padding: 10px;
+                font-weight: 600;
+                position: relative;
+            }
+
+            .config-container {
+                border: 5px solid black;
+                height: 100%;
+            }
+
+            .button-container button i {
+                float: left;
+                position: absolute;
+                left: 0;
+                margin-left: 10px;
+            }
+
+            .w3-container.w3-half {
+                height: 100%;
+                padding: 20px;
+            }
+
+            table {
+                width: 100%;
+                height: 100%;
+            }
+
+            table tr td {
+                padding: 10px;
+                margin: 0px;
+
+            }
+
+            table tr td i {
+                font-size: 17.5px;
+                vertical-align: middle;
+                color: #7a7a7a;
+            }
+
+            table tr td span {
+                vertical-align: middle;
+                margin-left: 5px;
+            }
+
+            table tr td p {
+                font-size: 12.5px;
+                margin: 0;
+                color: #7a7a7a;
+                display: inline;
+            }
+
+            table tr:nth-child(even) {
+                background-color: #dfe3e8;
+            }
+
+            table tr:nth-child(even) .w3-blurb {
+                background-color: #ced4db;
+                margin-top: 10px;
+                padding: 7.5px;
+                line-height: normal;
+                padding-bottom: 10px;
+            }
+
+            table tr:nth-child(even) .w3-blurb i {
+                color: #7a7a7a;
+                font-size: 15px;
+                font-weight: 900;
+            }
+
+            table tr:nth-child(odd) .w3-blurb {
+                background-color: #dfe3e8;
+                margin-top: 10px;
+                padding: 7.5px;
+                line-height: normal;
+                padding-bottom: 10px;
+            }
+
+            table tr:nth-child(odd) {
+                background-color: #ced4db;
+            }
+
+            td select {
+                float: right;
+                border: none;
+                padding: 2.5px;
+                vertical-align: middle;
+            }
