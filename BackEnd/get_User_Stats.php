@@ -4,6 +4,7 @@
     last modified: 11/6/2024 
 */
 require_once("./hum_conn_no_login.php");
+ini_set('display_errors', 1);
 
 function get_user_stats($conn, $user_id)
 {
