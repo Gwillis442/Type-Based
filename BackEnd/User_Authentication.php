@@ -1,4 +1,8 @@
 <?php
+/*
+    by: Chan Rain, Garrett Willis, Kevin Tieu
+    last modified: 11/6/2024 
+*/
 require_once("hum_conn_no_login.php");
 
 

@@ -17,7 +17,7 @@ INSERT INTO user_profile VALUES ('12345678', 'John', 'Doe', 'fake@email.com');
 
 --Inserting into user_account
 
-INSERT INTO user_account VALUES ('12345678', 'johndoe', 'password');
+INSERT INTO user_account VALUES ('12345678', 'username', 'password');
 
 --Inserting into user_config
 

@@ -11,7 +11,7 @@ Should Print out:
 
 USER_ID  USERNAME             PASSWORD                                     
 -------- -------------------- --------------------                         
-12345678 johndoe              password                                     
+12345678 username             password                                     
 
 Selecting from user_account
 Should Print out:
