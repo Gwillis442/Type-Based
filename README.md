@@ -7,4 +7,6 @@ Version 1.0 approved
 # Kevin Tieu
 # Tye Maynard
 
-Updated October 30, 2024
+# Current version running at:
+https://nrs-projects.humboldt.edu/~gdw48/Type-Based/Index.php
+Updated November 7, 2024
