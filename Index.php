@@ -381,6 +381,14 @@
             initSettingsListener();
             initSignInState();
             document.body.style.opacity = '100%';
+
+            <?php if(isset($_SESSION['login_failed']) && $_SESSION['login_failed']) { ?>
+                alert('Invalid username or password. Please try again.');
+                document.getElementById('signInModalContainer').style.opacity = '100%';
+                document.getElementById('signInModalContainer').style.pointerEvents = 'auto';
+                document.getElementById('signInModalContainer').style.transform = 'scale(1.1)';
+            <?php unset($_SESSION['login_failed']); // Clear the login_failed session variable 
+                } ?>
         };
 
     </script>

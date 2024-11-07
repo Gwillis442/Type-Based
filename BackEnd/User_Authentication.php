@@ -34,7 +34,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         header("Location: ../Index.php"); // Redirect to Index.php
         exit();
     } else {
-        echo "Invalid username or password";
+         
+        $_SESSION['login_failed'] = true; // Set session variable for failed login
+        header("Location: ../Index.php"); // Redirect to Index.php
+        exit();
+
+        
     }
 
     oci_close($conn);
