@@ -157,17 +157,11 @@
         </div>
     </div>
 
-    <?php
-        if (isset($_SESSION['username'])) {
-    ?>
-            <h1>Welcome, <?= htmlspecialchars($_SESSION['username'])?>!</h1>
-    <?php
-        } else{
-    ?>
+
     <div id="signInModalContainer">
         <div id="signInModal" class="w3-container w3-display-middle w3-center" style="width: 50%">
             <div class="w3-container button-container">
-                <form id="signInForm" method="post" action="BackEnd/User_Authentication.php" class="w3-container w3-card-4 w3-margin">
+                <form id="signInForm" method="post" action="BackEnd/User_Authentication.php" onsubmit="signIn(event)" class="w3-container w3-card-4 w3-margin">
                     <h2 class="w3-left w3-margin-top">Sign In</h2>
                     <i class="ri-close-line modalCloseButton" onclick="closeSignInModal()"></i>
 
@@ -198,9 +192,7 @@
             </div>
         </div>
     </div>
-    <?php
-    }
-    ?>
+
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 
@@ -318,6 +310,7 @@
                 localStorage.setItem('userObject', JSON.stringify(user));
                 document.getElementById('username').value = '';
                 document.getElementById('password').value = '';
+                <?php session_destroy(); ?>
             } else {
                 document.getElementById('signInModalContainer').style.opacity = '100%';
                 document.getElementById('signInModalContainer').style.pointerEvents = 'auto';
