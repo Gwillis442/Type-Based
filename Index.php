@@ -375,7 +375,13 @@
             const element = document.querySelector(selector);
             if (element && element._tippy) element._tippy.destroy();
         }
-        
+                
+        <?php if(isset($_SESSION['username']) && $_SESSION['username']) { ?>
+            user.signedIn = true;
+            user.username = '<?= $_SESSION['username'] ?>';
+            localStorage.setItem('userObject', JSON.stringify(user));
+            updateSignInDisplay();
+        <?php } ?>
 
         window.onload = function () {
             applySettingsFromLocalStorage();
@@ -384,12 +390,6 @@
             document.body.style.opacity = '100%';
         };
 
-        <?php if(isset($_SESSION['username']) && $_SESSION['username']) { ?>
-            user.signedIn = true;
-            user.username = '<?= $_SESSION['username'] ?>';
-            localStorage.setItem('userObject', JSON.stringify(user));
-            updateSignInDisplay();
-        <?php } ?>
     </script>
 
 </body>
