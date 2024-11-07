@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html>
     <!--
@@ -154,6 +157,13 @@
         </div>
     </div>
 
+    <?php
+        if (isset($_SESSION['username'])) {
+    ?>
+            <h1>Welcome, <?= htmlspecialchars($_SESSION['username'])?>!</h1>
+    <?php
+        } else{
+    ?>
     <div id="signInModalContainer">
         <div id="signInModal" class="w3-container w3-display-middle w3-center" style="width: 50%">
             <div class="w3-container button-container">
@@ -188,7 +198,9 @@
             </div>
         </div>
     </div>
-
+    <?php
+    }
+    ?>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 
@@ -361,6 +373,7 @@
             const element = document.querySelector(selector);
             if (element && element._tippy) element._tippy.destroy();
         }
+        
 
         window.onload = function () {
             applySettingsFromLocalStorage();
@@ -368,6 +381,13 @@
             initSignInState();
             document.body.style.opacity = '100%';
         };
+
+        <?php if(isset($_SESSION['username']) && $_SESSION['username']) { ?>
+            user.signedIn = true;
+            user.username = '<?= $_SESSION['username'] ?>';
+            localStorage.setItem('userObject', JSON.stringify(user));
+            updateSignInDisplay();
+        <?php } ?>
     </script>
 
 </body>
