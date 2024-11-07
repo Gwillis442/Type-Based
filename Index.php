@@ -268,6 +268,8 @@
         }
 
         function updateConfigButtonDisplay() {
+            console.log(settings.history, user.signedIn);
+            console.log(document.getElementById('menuConfigButton'));
             const menuConfigButton = document.getElementById('menuConfigButton');
 
             if (settings.history && user.signedIn) {
