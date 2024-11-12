@@ -5,7 +5,7 @@
 <html>
     <!--
     by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 11/6/2024 
+    last modified: 11/12/2024 
 
     you can run this using the URL:
     https://nrs-projects.humboldt.edu/~gdw48/Type-Based/Index.php
