@@ -417,7 +417,7 @@ session_start();
                 // Submit the form to User_Authentication.php for server-side authentication
                 document.getElementById('createAccountForm').submit();
             } else {
-                alert('Please enter both username and password.');
+                alert('Please enter all required information.');
             }
         }
 
