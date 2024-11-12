@@ -9,14 +9,22 @@ ini_set('display_errors', 1);
 
     function user_Authentication($conn, $username, $password)
     {
-        $query = 'SELECT * FROM user_account WHERE username = :username AND password = :password';
+        $query = 'SELECT * FROM user_account WHERE username = :username';
         $stmt = oci_parse($conn, $query);
         oci_bind_by_name($stmt, ':username', $username);
         oci_bind_by_name($stmt, ':password', $password);
         oci_execute($stmt, OCI_DEFAULT);
         $row = oci_fetch_assoc($stmt);
+        print_r($row);
         if ($row) {
-            return true; // User found
+            if(password_verify($password, $row['PASSWORD']))
+            {
+                return true; // User found
+
+            } else {
+
+                return false; // User not found
+            }
         } else {
             return false; // User not found
         }

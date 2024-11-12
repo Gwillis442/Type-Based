@@ -3,11 +3,13 @@
     by: Chan Rain, Garrett Willis, Kevin Tieu
     last modified: 11/6/2024 
 */
-require_once("./hum_conn_no_login.php");
+require_once("hum_conn_no_login.php");
 ini_set('display_errors', 1);
 
-function create_User($conn, $user_id, $username, $password, $email, $first_name, $last_name)
+function create_User($conn, $username, $password, $email, $first_name, $last_name)
 {
+    //Generate a unique user_id
+    $user_id = uniqid();
     // Check if the username already exists
     $check_query = 'SELECT COUNT(*) AS count FROM user_account WHERE username = :username';
     $check_stmt = oci_parse($conn, $check_query);
@@ -43,10 +45,10 @@ function create_User($conn, $user_id, $username, $password, $email, $first_name,
     oci_bind_by_name($insert_account_stmt, ':password', $hashed_password);
 
     if (oci_execute($insert_account_stmt, OCI_COMMIT_ON_SUCCESS)) {
-        return "Account created successfully!";
+        return true;
     } else {
         $e = oci_error($insert_account_stmt);
-        return "Error creating account: " . htmlentities($e['message']);
+        return false;
     }
 }
 
@@ -55,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn = hum_conn_no_login();
 
     // Retrieve and sanitize form data
-    $user_id = htmlspecialchars($_POST['user_id']);
     $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
     $email = htmlspecialchars($_POST['email']);
@@ -63,8 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $last_name = htmlspecialchars($_POST['last_name']);
 
     // Create the user
-    $message = create_user($conn, $user_id, $username, $password, $email, $first_name, $last_name);
-    echo "<p>$message</p>";
+    $create = create_user($conn, $username, $password, $email, $first_name, $last_name);
+    if ($create === true) {
+        echo '<script>
+            alert("User created successfully!");
+            window.location.href = "../Index.php";
+        </script>';
+    } else {
+        echo "<script>
+            alert('Error creating user: $create');
+            window.location.href = '../Index.php';
+            </script>";
+    }
 
     // Close the connection
     oci_close($conn);

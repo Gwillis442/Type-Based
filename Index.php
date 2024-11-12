@@ -210,7 +210,7 @@ session_start();
         <div id="createAccountModal" class="w3-container w3-display-middle w3-center" style="width: 50%">
             
         <div class="w3-container button-container">
-                <form id="createAccountForm" method="post" action="BackEnd/User_Authentication.php"
+                <form id="createAccountForm" method="post" action="BackEnd/User_Creation.php"
                     onsubmit="createAccount(event)" class="w3-container w3-card-4 w3-margin">
                     <h2 class="w3-left w3-margin-top">Create Account</h2>
                     <i class="ri-close-line modalCloseButton" onclick="closeCreateAccountModal()"></i>
@@ -226,7 +226,6 @@ session_start();
                         </div>
                     </div>
             
-
             <div class="w3-row w3-section">
                 <div class="w3-col" style="width:50px;margin:1px;margin-left:-5px;">
                 <i class="w3-xlarge ri-mail-line"></i>
@@ -410,8 +409,8 @@ session_start();
 
         function modalCreateAccount(event) {
             event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById('createAccountUsername').value;
+            const password = document.getElementById('createAccountPassword').value;
 
             if (username && password) {
                 // Submit the form to User_Authentication.php for server-side authentication

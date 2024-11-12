@@ -6,21 +6,21 @@ drop table user_account;
 drop table user_profile;
 
 CREATE TABLE user_profile(
-    user_id VARCHAR2(8) PRIMARY KEY,
+    user_id VARCHAR2(20) PRIMARY KEY,
     first_name VARCHAR2(50),
     last_name VARCHAR2(50),
     email VARCHAR2(50)
 );
 
 CREATE TABLE user_account(
-    user_id VARCHAR2(8) PRIMARY KEY,
+    user_id VARCHAR2(20) PRIMARY KEY,
     username VARCHAR2(20),
-    password VARCHAR2(60),
+    password VARCHAR2(64),
     FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
 );
 
 CREATE TABLE user_config(
-    user_id VARCHAR2(8) PRIMARY KEY,
+    user_id VARCHAR2(20) PRIMARY KEY,
     default_mode VARCHAR2(5),
     sound int,
     music int,
@@ -29,7 +29,7 @@ CREATE TABLE user_config(
 );
 
 CREATE TABLE math_stats(
-    user_id VARCHAR2(8) PRIMARY KEY,
+    user_id VARCHAR2(20) PRIMARY KEY,
     accuracy float(1),
     total_games_easy int, 
     total_games_medium int,
@@ -41,7 +41,7 @@ CREATE TABLE math_stats(
 );
 
 CREATE TABLE typing_stats(
-    user_id VARCHAR2(8) PRIMARY KEY,
+    user_id VARCHAR2(20) PRIMARY KEY,
     wpm int,
     total_games_easy int,
     total_games_medium int,
