@@ -1,14 +1,15 @@
 <?php
-    session_start();
+session_start();
 ?>
 <!DOCTYPE html>
 <html>
+
     <!--
     by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 11/12/2024 
+    last modified: 11/12/2024, 9:30 AM PST 
 
     you can run this using the URL:
-    https://nrs-projects.humboldt.edu/~gdw48/Type-Based/Index.php
+    https://nrs-projects.humboldt.edu/~gdw48/Type-Based/Index.html
 -->
 
 <head>
@@ -26,7 +27,8 @@
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
 
     <style>
-        #signInModalContainer {
+        #signInModalContainer,
+        #createAccountModalContainer {
             position: fixed;
             width: 100%;
             height: 100%;
@@ -37,7 +39,8 @@
             pointer-events: none;
         }
 
-        #signInModalContainer #signInForm {
+        #signInModalContainer #signInForm,
+        #createAccountModalContainer #createAccountForm {
             background-color: #f2f3f5;
             position: relative;
         }
@@ -78,7 +81,7 @@
             <div style="display: flex; justify-content: space-between;">
                 <button id="menuSignInButton" style="flex: 1; margin-right: 5px;" onclick="signIn()">
                     <i class="ri-login-box-line"></i>
-                    <span style="font-size:20px;vertical-align: text-top;">SIGN IN</span>
+                    <span style="font-size:20px;vertical-align: text-top;">LOG IN</span>
                 </button>
                 <button id="menuConfigButton" style="flex: 1; margin-left: 5px;opacity:10%;pointer-events:none"
                     onclick="viewData()">
@@ -161,8 +164,9 @@
     <div id="signInModalContainer">
         <div id="signInModal" class="w3-container w3-display-middle w3-center" style="width: 50%">
             <div class="w3-container button-container">
-                <form id="signInForm" method="post" action="BackEnd/User_Authentication.php" onsubmit="signIn(event)" class="w3-container w3-card-4 w3-margin">
-                    <h2 class="w3-left w3-margin-top">Sign In</h2>
+                <form id="signInForm" method="post" action="BackEnd/User_Authentication.php" onsubmit="signIn(event)"
+                    class="w3-container w3-card-4 w3-margin">
+                    <h2 class="w3-left w3-margin-top">Log In</h2>
                     <i class="ri-close-line modalCloseButton" onclick="closeSignInModal()"></i>
 
                     <div class="w3-row w3-section">
@@ -183,21 +187,85 @@
                         </div>
                     </div>
 
-                    <button class="w3-block w3-section" type="submit" id="menuModalSignInButton"
-                        onclick="modalSignIn(event)">
-                        <i class="ri-login-box-line"></i>
-                        <span style="font-size:20px;vertical-align: text-top;">SIGN IN</span>
-                    </button>
+                    <div style="display: flex; justify-content: space-between;">
+                        <button class="w3-block w3-section" type="submit" id="menuModalSignInButton"
+                            style="flex: 1; margin-right: 5px;" onclick="modalSignIn(event)">
+                            <i class="ri-login-box-line"></i>
+                            <span style="font-size:20px;vertical-align: text-top;">LOG IN</span>
+                        </button>
 
-                    <button class="w3-block w3-section" type="submit" id="menuModalCreateAccountButton"
-                        onclick="modalCreateAccount(event)">
-                        <i class="ri-add-box-line"></i>
-                        <span style="font-size:20px;vertical-align: text-top;">CREATE ACCOUNT</span>
-                    </button>
+                        <button type="button" class="w3-block w3-section" id="menuModalCreateAccountButton"
+                            style="flex: 1; margin-left: 5px;" onclick="displayCreateAccountModal()">
+                            <i class="ri-user-add-line"></i>
+                            <span style="font-size:20px;vertical-align: text-top;">SIGN UP</span>
+                        </button>
+                    </div>
 
                 </form>
             </div>
         </div>
+    </div>
+
+    <div id="createAccountModalContainer">
+        <div id="createAccountModal" class="w3-container w3-display-middle w3-center" style="width: 50%">
+            
+        <div class="w3-container button-container">
+                <form id="createAccountForm" method="post" action="BackEnd/User_Authentication.php"
+                    onsubmit="createAccount(event)" class="w3-container w3-card-4 w3-margin">
+                    <h2 class="w3-left w3-margin-top">Create Account</h2>
+                    <i class="ri-close-line modalCloseButton" onclick="closeCreateAccountModal()"></i>
+
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px;margin:1px;margin-left:-5px;"><i
+                                class="w3-xlarge ri-info-card-line"></i></div>
+                        <div class="w3-rest" style="display: flex;">
+                            <input class="w3-input" type="text" id="createAccountFirstName" name="first_name"
+                                placeholder="First Name" style="flex: 1; margin-right: 5px;" required>
+                            <input class="w3-input" type="text" id="createAccountLastName" name="last_name"
+                                placeholder="Last Name" style="flex: 1; margin-left: 5px;" required>
+                        </div>
+                    </div>
+            
+
+            <div class="w3-row w3-section">
+                <div class="w3-col" style="width:50px;margin:1px;margin-left:-5px;">
+                <i class="w3-xlarge ri-mail-line"></i>
+                </div>
+                <div class="w3-rest">
+                    <input class="w3-input" type="text" id="createAccountEmail" name="email"
+                        placeholder="email@domain.com" required>
+                </div>
+            </div>
+
+            <div class="w3-row w3-section">
+                <div class="w3-col" style="width:50px;margin:1px;margin-left:-5px;"><i
+                        class="w3-xlarge ri-user-line"></i></div>
+                <div class="w3-rest">
+                    <input class="w3-input" type="text" id="createAccountUsername" name="username"
+                        placeholder="Username" required>
+                </div>
+            </div>
+
+            <div class="w3-row w3-section">
+                <div class="w3-col" style="width:50px;margin:1px;margin-left:-5px"><i
+                        class="w3-xlarge ri-lock-line"></i></div>
+                <div class="w3-rest">
+                    <input class="w3-input" type="password" id="createAccountPassword" name="password"
+                        placeholder="Password" required>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between;">
+                <button class="w3-block w3-section" type="submit" id="menuModalCreateAccountButton"
+                    style="flex: 1; margin-right: 5px;" onclick="modalCreateAccount(event)">
+                    <i class="ri-user-add-line"></i>
+                    <span style="font-size:20px;vertical-align: text-top;">SIGN UP</span>
+                </button>
+
+            </div>
+            </form>
+        </div>
+    </div>
     </div>
 
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
@@ -303,8 +371,8 @@
 
         function updateSignInDisplay() {
             document.getElementById('menuSignInButton').innerHTML = user.signedIn
-                ? '<i class="ri-logout-box-line"></i><span style="font-size:20px;vertical-align: text-top;">SIGN OUT</span>'
-                : '<i class="ri-login-box-line"></i><span style="font-size:20px;vertical-align: text-top;">SIGN IN</span>';
+                ? '<i class="ri-logout-box-line"></i><span style="font-size:20px;vertical-align: text-top;">LOG OUT</span>'
+                : '<i class="ri-login-box-line"></i><span style="font-size:20px;vertical-align: text-top;">LOG IN</span>';
 
             updateConfigButtonDisplay();
             updateTooltips();
@@ -347,12 +415,36 @@
 
             if (username && password) {
                 // Submit the form to User_Authentication.php for server-side authentication
-                document.getElementById('signInForm').submit();
+                document.getElementById('createAccountForm').submit();
             } else {
                 alert('Please enter both username and password.');
             }
         }
 
+        function displayCreateAccountModal() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            document.getElementById('createAccountModalContainer').style.opacity = '100%';
+            document.getElementById('createAccountModalContainer').style.pointerEvents = 'auto';
+            document.getElementById('createAccountModalContainer').style.transform = 'scale(1.1)';
+
+            document.getElementById('createAccountUsername').value = username;
+            document.getElementById('createAccountPassword').value = password;
+
+            username.value = '';
+            password.value = '';
+            document.getElementById('signInModalContainer').style.opacity = '0%';
+            document.getElementById('signInModalContainer').style.pointerEvents = 'none';
+            document.getElementById('signInModalContainer').style.transform = 'scale(1)';
+        }
+
+        function closeCreateAccountModal() {
+            const modal = document.getElementById('createAccountModalContainer');
+            modal.style.opacity = '0%';
+            modal.style.pointerEvents = 'none';
+            modal.style.transform = 'scale(1)';
+        }
 
         function closeSignInModal() {
             const modal = document.getElementById('signInModalContainer');
@@ -369,8 +461,8 @@
         function updateTooltips() {
             destroyTooltip('#menuSignInButton');
             const signInTooltipContent = user.signedIn
-                ? 'Sign out to switch accounts.'
-                : 'Sign in to save your progress!';
+                ? 'Log out to switch accounts.'
+                : 'Log in to save your progress!';
 
             createTooltip('#menuSignInButton', signInTooltipContent);
             createTooltip('#menuConfigButton', 'View past game data.');
@@ -389,8 +481,8 @@
             const element = document.querySelector(selector);
             if (element && element._tippy) element._tippy.destroy();
         }
-                
-        <?php if(isset($_SESSION['username']) && $_SESSION['username']) { ?>
+
+        <?php if (isset($_SESSION['username']) && $_SESSION['username']) { ?>
             user.signedIn = true;
             user.username = '<?= $_SESSION['username'] ?>';
             localStorage.setItem('userObject', JSON.stringify(user));
@@ -403,13 +495,13 @@
             initSignInState();
             document.body.style.opacity = '100%';
 
-            <?php if(isset($_SESSION['login_failed']) && $_SESSION['login_failed']) { ?>
+            <?php if (isset($_SESSION['login_failed']) && $_SESSION['login_failed']) { ?>
                 alert('Invalid username or password. Please try again.');
                 document.getElementById('signInModalContainer').style.opacity = '100%';
                 document.getElementById('signInModalContainer').style.pointerEvents = 'auto';
                 document.getElementById('signInModalContainer').style.transform = 'scale(1.1)';
-            <?php unset($_SESSION['login_failed']); // Clear the login_failed session variable 
-                } ?>
+                <?php unset($_SESSION['login_failed']); // Clear the login_failed session variable 
+            } ?>
         };
 
     </script>
