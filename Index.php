@@ -188,6 +188,13 @@
                         <i class="ri-login-box-line"></i>
                         <span style="font-size:20px;vertical-align: text-top;">SIGN IN</span>
                     </button>
+
+                    <button class="w3-block w3-section" type="submit" id="menuModalCreateAccountButton"
+                        onclick="modalCreateAccount(event)">
+                        <i class="ri-add-box-line"></i>
+                        <span style="font-size:20px;vertical-align: text-top;">CREATE ACCOUNT</span>
+                    </button>
+
                 </form>
             </div>
         </div>
@@ -332,6 +339,20 @@
                 alert('Please enter both username and password.');
             }
         }
+
+        function modalCreateAccount(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                // Submit the form to User_Authentication.php for server-side authentication
+                document.getElementById('signInForm').submit();
+            } else {
+                alert('Please enter both username and password.');
+            }
+        }
+
 
         function closeSignInModal() {
             const modal = document.getElementById('signInModalContainer');
