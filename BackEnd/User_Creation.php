@@ -3,6 +3,7 @@
     by: Chan Rain, Garrett Willis, Kevin Tieu
     last modified: 11/6/2024 
 */
+session_start();
 require_once("hum_conn_no_login.php");
 ini_set('display_errors', 1);
 
@@ -66,14 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Create the user
     $create = create_user($conn, $username, $password, $email, $first_name, $last_name);
     if ($create === true) {
+        $_SESSION['username'] = $username; // Set session variable
         echo '<script>
-            alert("User created successfully!");
-            window.location.href = "../Index.php";
-        </script>';
+                alert("User created successfully!");
+                window.location.href = "../Index.php";
+            </script>';
+
     } else {
         echo "<script>
+
             alert('Error creating user: $create');
-            window.location.href = '../Index.php';
             </script>";
     }
 

@@ -399,7 +399,7 @@ session_start();
             const password = document.getElementById('password').value;
 
             if (username && password) {
-
+                
                 // Submit the form to User_Authentication.php for server-side authentication
                 document.getElementById('signInForm').submit();
             } else {
