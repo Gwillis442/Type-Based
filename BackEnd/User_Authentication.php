@@ -34,8 +34,8 @@ ini_set('display_errors', 1);
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
     $conn = hum_conn_no_login();
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     if(user_Authentication($conn, $username, $password))
     {
         $_SESSION['username'] = $username; // Set session variable

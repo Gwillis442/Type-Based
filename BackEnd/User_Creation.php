@@ -57,11 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn = hum_conn_no_login();
 
     // Retrieve and sanitize form data
-    $username = htmlspecialchars($_POST['username']);
-    $password = htmlspecialchars($_POST['password']);
-    $email = htmlspecialchars($_POST['email']);
-    $first_name = htmlspecialchars($_POST['first_name']);
-    $last_name = htmlspecialchars($_POST['last_name']);
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $first_name = filter_input(INPUT_POST, 'first_name', FILTER_SANITIZE_STRING);
+    $last_name = filter_input(INPUT_POST, 'last_name', FILTER_SANITIZE_STRING);
 
     // Create the user
     $create = create_user($conn, $username, $password, $email, $first_name, $last_name);
