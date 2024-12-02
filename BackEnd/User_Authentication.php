@@ -1,7 +1,7 @@
 <?php
 /*
     by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 11/7/2024 
+    last modified: 11/10/2024 
 */
 session_start();
 require_once("hum_conn_no_login.php");

@@ -6,7 +6,7 @@ session_start();
 
     <!--
     by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 11/12/2024, 9:30 AM PST 
+    last modified: 11/13/2024, 9:30 AM PST 
 
     you can run this using the URL:
     https://nrs-projects.humboldt.edu/~gdw48/Type-Based/Index.html
