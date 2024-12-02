@@ -11,5 +11,3 @@ user_config(USER_ID, default_mode, sound, music, play_history)
 typing_stats(USER_ID, wpm, total_games_easy, total_games_medium, total_games hard, highscore_easy, highscore_medium, highscore_hard)
 	Foreign Key(user_id) references user(user_id)
 
-math_stats(USER_ID, accuracy, total_games_easy, total_games_medium, total_games_hard, highscore_easy, highscore_medium, highscore_hard)
-	Foreign Key(user_id) references user(user_id)

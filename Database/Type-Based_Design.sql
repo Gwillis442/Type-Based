@@ -28,18 +28,6 @@ CREATE TABLE user_config(
     FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
 );
 
-CREATE TABLE math_stats(
-    user_id VARCHAR2(20) PRIMARY KEY,
-    accuracy float(1),
-    total_games_easy int, 
-    total_games_medium int,
-    total_games_hard int,
-    high_score_easy int,
-    high_score_medium int,
-    high_score_hard int,
-    FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
-);
-
 CREATE TABLE typing_stats(
     user_id VARCHAR2(20) PRIMARY KEY,
     wpm int,
