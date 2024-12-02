@@ -1,6 +1,5 @@
 -- start Type-Based_Design.sql
 drop table typing_stats;
-drop table math_stats;
 drop table user_config;
 drop table user_account;
 drop table user_profile;
