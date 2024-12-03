@@ -1,5 +1,6 @@
 <?php
-session_start();
+    session_start();
+    require_once("./BackEnd/hum_conn_no_login.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -384,7 +385,6 @@ session_start();
                 localStorage.setItem('userObject', JSON.stringify(user));
                 document.getElementById('username').value = '';
                 document.getElementById('password').value = '';
-                <?php session_destroy(); ?>
             } else {
                 document.getElementById('signInModalContainer').style.opacity = '100%';
                 document.getElementById('signInModalContainer').style.pointerEvents = 'auto';
@@ -489,7 +489,6 @@ session_start();
             user.signedIn = true;
             user.username = '<?= $_SESSION['username'] ?>';
             localStorage.setItem('userObject', JSON.stringify(user));
-            updateSignInDisplay();
         <?php } ?>
 
         window.onload = function () {

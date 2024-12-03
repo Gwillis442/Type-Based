@@ -67,6 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Create the user
     $create = create_user($conn, $username, $password, $email, $first_name, $last_name);
     if ($create === true) {
+        $query = 'SELECT user_id FROM user_account WHERE username = :username';
+        $stmt = oci_parse($conn, $query);
+        oci_bind_by_name($stmt, ':username', $username);
+        oci_execute($stmt);
+        $row = oci_fetch_assoc($stmt);
+        
+        $_SESSION['user_id'] = $row['USER_ID']; // Set session variable
         $_SESSION['username'] = $username; // Set session variable
         echo '<script>
                 alert("User created successfully!");

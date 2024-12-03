@@ -3,8 +3,9 @@
     by: Chan Rain, Garrett Willis, Kevin Tieu
     last modified: 12/2/2024 
 */
-
+session_start();
 require_once("./hum_conn_no_login.php");
+ini_set('display_errors', 1);
 ini_set('display_errors', 1);
 
 function check_high_score($conn, $user_id, $score_easy, $score_medium, $score_hard)

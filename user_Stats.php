@@ -1,15 +1,15 @@
+<?php 
+    session_start(); 
+    require_once("./BackEnd/hum_conn_no_login.php");
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL); // Enable all error reporting
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>User Stats</title>
-    <?php 
-    session_start(); 
-    require_once("./BackEnd/hum_conn_no_login.php");
-    ini_set('display_errors', 1);
-    ?>
 </head>
-
 <body>
     <?php
     function get_user_stats($conn, $user_id)
@@ -31,49 +31,42 @@
         return oci_fetch_assoc($stmt);
     }
 
-    function get_user_id($conn, $username)
-    {
-        // Prepare the SQL query to fetch user ID from users table
-        $query = '
-            SELECT 
-                u.user_id
-            FROM 
-                users u
-            WHERE 
-                u.username = :username';
-    
-        $stmt = oci_parse($conn, $query);
-        oci_bind_by_name($stmt, ':username', $username);
-        oci_execute($stmt);
-    
-        $row = oci_fetch_assoc($stmt);
-    
-        return $row['USER_ID'];
+    // Ensure the user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        echo "<p>User not logged in. Please log in to view your stats.</p>";
+        exit();
     }
 
+    $conn = hum_conn_no_login();
+    $user_id = $_SESSION['user_id'];
+
+    // Get the user stats
+    $user_stats = get_user_stats($conn, $user_id);
+
+    // Assign variables
+    $wpm = $user_stats['WPM'] ?? 'N/A';
+    $totalGamesEasy = $user_stats['TOTAL_GAMES_EASY'] ?? 'N/A';
+    $totalGamesMedium = $user_stats['TOTAL_GAMES_MEDIUM'] ?? 'N/A';
+    $totalGamesHard = $user_stats['TOTAL_GAMES_HARD'] ?? 'N/A';
+    $highScoreEasy = $user_stats['HIGH_SCORE_EASY'] ?? 'N/A';
+    $highScoreMedium = $user_stats['HIGH_SCORE_MEDIUM'] ?? 'N/A';
+    $highScoreHard = $user_stats['HIGH_SCORE_HARD'] ?? 'N/A';
     ?>
     <script>
-        window.onload = function() {
-            // Get the user ID from the session
-            <?php $conn = hum_conn_no_login(); ?>
-            var username = '<?php echo $_SESSION['username']; ?>';
-            var user_id = '<?php echo get_user_id($conn, $_SESSION['username']); ?>';
-            
-        };
-        
-           
+        document.addEventListener('DOMContentLoaded', () => {
+            const userId = <?= json_encode($user_id) ?>;
+            console.log('User ID:', userId);
+            // You can call a function here to use the userId if needed
+        });
     </script>
-
-    <h1>User Stats</h1>
-    <div> 
-        <p>WPM: <span id="wpm"></span></p>
-        <p>Total Games (Easy): <span id="total_games_easy"></span></p>
-        <p>Total Games (Medium): <span id="total_games_medium"></span></p>
-        <p>Total Games (Hard): <span id="total_games_hard"></span></p>
-        <p>High Score (Easy): <span id="high_score_easy"></span></p>
-        <p>High Score (Medium): <span id="high_score_medium"></span></p>
-        <p>High Score (Hard): <span id="high_score_hard"></span></p>
-    </div>
+    <h2>User Stats for User ID: <?= htmlentities($user_id) ?></h2>
+    <p>WPM: <?= htmlentities($wpm) ?></p>
+    <p>Total Games (Easy): <?= htmlentities($totalGamesEasy) ?></p>
+    <p>Total Games (Medium): <?= htmlentities($totalGamesMedium) ?></p>
+    <p>Total Games (Hard): <?= htmlentities($totalGamesHard) ?></p>
+    <p>High Score (Easy): <?= htmlentities($highScoreEasy) ?></p>
+    <p>High Score (Medium): <?= htmlentities($highScoreMedium) ?></p>
+    <p>High Score (Hard): <?= htmlentities($highScoreHard) ?></p>
     <?php
     // Close the connection
     oci_close($conn);

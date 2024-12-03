@@ -38,6 +38,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     if(user_Authentication($conn, $username, $password))
     {
+        $query = 'SELECT user_id FROM user_account WHERE username = :username';
+        $stmt = oci_parse($conn, $query);
+        oci_bind_by_name($stmt, ':username', $username);
+        oci_execute($stmt);
+        $row = oci_fetch_assoc($stmt);
+
+        $_SESSION['user_id'] = $row['USER_ID']; // Set session variable
         $_SESSION['username'] = $username; // Set session variable
         header("Location: ../Index.php"); // Redirect to Index.php
         exit();
