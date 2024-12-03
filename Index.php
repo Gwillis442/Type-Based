@@ -454,7 +454,11 @@ session_start();
 
         function startGame() {
             applySettingsToLocalStorage();
-            setTimeout(() => window.location.href = 'game.html', 1);
+            setTimeout(() => window.location.href = 'game.php', 1);
+        }
+
+        function viewData() {
+            setTimeout(() => window.location.href = 'user_Stats.php', 1);
         }
 
         function updateTooltips() {

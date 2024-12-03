@@ -3,6 +3,7 @@
     by: Chan Rain, Garrett Willis, Kevin Tieu
     last modified: 11/6/2024 
 */
+session_start();
 require_once("./hum_conn_no_login.php");
 ini_set('display_errors', 1);
 
@@ -11,7 +12,7 @@ function get_user_stats($conn, $user_id)
     // Prepare the SQL query to fetch user stats from typing_stats table
     $query = '
         SELECT 
-            ts.wpm, ts.accuracy, ts.total_games_easy, ts.total_games_medium, ts.total_games_hard,
+            ts.wpm, ts.total_games_easy, ts.total_games_medium, ts.total_games_hard,
             ts.high_score_easy, ts.high_score_medium, ts.high_score_hard
         FROM 
             typing_stats ts
@@ -37,17 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Display the user stats
     if ($user_stats) {
-        echo "<h2>User Stats for User ID: $user_id</h2>";
-        echo "<p>WPM: " . htmlentities($user_stats['WPM']) . "</p>";
-        echo "<p>Accuracy: " . htmlentities($user_stats['ACCURACY']) . "</p>";
-        echo "<p>Total Games (Easy): " . htmlentities($user_stats['TOTAL_GAMES_EASY']) . "</p>";
-        echo "<p>Total Games (Medium): " . htmlentities($user_stats['TOTAL_GAMES_MEDIUM']) . "</p>";
-        echo "<p>Total Games (Hard): " . htmlentities($user_stats['TOTAL_GAMES_HARD']) . "</p>";
-        echo "<p>High Score (Easy): " . htmlentities($user_stats['HIGH_SCORE_EASY']) . "</p>";
-        echo "<p>High Score (Medium): " . htmlentities($user_stats['HIGH_SCORE_MEDIUM']) . "</p>";
-        echo "<p>High Score (Hard): " . htmlentities($user_stats['HIGH_SCORE_HARD']) . "</p>";
+        header('Content-Type: application/json');
+        echo json_encode($user_stats);
     } else {
-        echo "<p>No stats found for User ID: $user_id</p>";
+        echo json_encode(['error' => 'No stats found for this user.']);
     }
 
     // Close the connection
