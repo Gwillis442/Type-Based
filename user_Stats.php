@@ -39,6 +39,7 @@
 
     $conn = hum_conn_no_login();
     $user_id = $_SESSION['user_id'];
+    $username = $_SESSION['username'];
 
     // Get the user stats
     $user_stats = get_user_stats($conn, $user_id);
@@ -52,14 +53,9 @@
     $highScoreMedium = $user_stats['HIGH_SCORE_MEDIUM'] ?? 'N/A';
     $highScoreHard = $user_stats['HIGH_SCORE_HARD'] ?? 'N/A';
     ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const userId = <?= json_encode($user_id) ?>;
-            console.log('User ID:', userId);
-            // You can call a function here to use the userId if needed
-        });
-    </script>
-    <h2>User Stats for User ID: <?= htmlentities($user_id) ?></h2>
+
+    
+    <h2>User Stats for: <?= htmlentities($username) ?></h2>
     <p>WPM: <?= htmlentities($wpm) ?></p>
     <p>Total Games (Easy): <?= htmlentities($totalGamesEasy) ?></p>
     <p>Total Games (Medium): <?= htmlentities($totalGamesMedium) ?></p>

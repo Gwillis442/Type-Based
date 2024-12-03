@@ -38,6 +38,16 @@ function create_User($conn, $username, $password, $email, $first_name, $last_nam
         return "Error creating user profile: " . htmlentities($e['message']);
     }
 
+    // Insert the new user into the typing_stats table
+    $insert_stats_query = 'INSERT INTO typing_stats (user_id, wpm, total_games_easy, total_games_medium, total_games_hard, high_score_easy, high_score_medium, high_score_hard) VALUES (:user_id, 0, 0, 0, 0, 0, 0, 0)';
+    $insert_stats_stmt = oci_parse($conn, $insert_stats_query);
+    oci_bind_by_name($insert_stats_stmt, ':user_id', $user_id);
+    
+    if (!oci_execute($insert_stats_stmt, OCI_COMMIT_ON_SUCCESS)) {
+        $e = oci_error($insert_stats_stmt);
+        return "Error entering typing stats: " . htmlentities($e['message']);
+    }
+
     // Insert the new user into the user_account table
     $insert_account_query = 'INSERT INTO user_account (user_id, username, password) VALUES (:user_id, :username, :password)';
     $insert_account_stmt = oci_parse($conn, $insert_account_query);
