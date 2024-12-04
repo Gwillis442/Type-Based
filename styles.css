@@ -131,3 +131,149 @@
                 padding: 2.5px;
                 vertical-align: middle;
             }
+
+            .note {
+                display: inline-block;
+                margin: 0 20px;
+                position: relative;
+            }
+
+            .note.a {
+                top: -20px;
+            }
+
+            .note.b {
+                top: -30px;
+            }
+
+            .note.b:not(.wholeNote) {
+                transform: rotate(180deg);
+                transform-origin: 50% 70px;
+            }
+
+            .note.c {
+                top: 30px;
+            }
+
+            .note.c:before {
+                content: "";
+                position: absolute;
+                width: 45px;
+                bottom: 10px;
+                left: -10px;
+                height: 2px;
+                background-color: black;
+            }
+
+            .note.d {
+                top: 20px;
+            }
+
+            .note.e {
+                top: 10px;
+            }
+
+            .note.g {
+                top: -10px;
+            }
+
+            .wholeNote {
+                background-image: none;
+                height: 20px;
+                width: 25px;
+            }
+
+            .dottedHalfNote {
+                background-image: none;
+                height: 80px;
+                width: 40px;
+            }
+
+            .halfNote {
+                background-image: none;
+                height: 80px;
+                width: 25px;
+            }
+
+            .quarterNote {
+                background-image: none;
+                height: 80px;
+                width: 25px;
+            }
+
+            .gameSpace {
+                position: absolute;
+                width: 100%;
+                bottom: 30px;
+            }
+
+            .square {
+                position: absolute;
+                border-radius: 100%;
+                transition: all 0.5s;
+                width: 50px;
+                height: 50px;
+                align-content: center;
+                justify-items: center;
+                display: grid;
+                font-size: 30px;
+                font-family: 'Lexend Deca', sans-serif;
+                font-weight: 900;
+                z-index:1;
+                opacity: 1;
+            }
+
+            #squareBorder {
+                background-color: transparent;
+                height: 100%;
+                position: absolute;
+                top: 0px;
+                left: 0;
+                z-index: 0;
+                background-image: url("FrontEnd/clef.jpg");
+                background-size: cover;
+                width: 200px;
+                border-radius: 0px 25px 25px 0px;
+                overflow:hidden;
+            }
+
+            #squareBorderGradient {
+                width: 100%;
+                height: 100%;
+                background-image: linear-gradient(to right, #ffffff00, #ff000050, #00800050, #ffffff00);
+            }
+            
+            #gameWord {
+                position: absolute;
+                justify-content: center;
+                font-weight: 600;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                height: 33.333vh;
+                font-size: 60px;
+            }
+
+            #gameWord span {
+                margin: 10px;
+                transition: all 0.5s 0s, filter 0.5s 1s;
+                color:black;
+            }
+
+            #gameStartButton {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                border: 1500px solid #ffffff50;
+                z-index: 1000;
+                background-color: #ffffff50;
+                backdrop-filter: blur(5px);
+                cursor: pointer;
+                font-size: 30px;
+                white-space: nowrap;
+                padding: 15px;
+                padding-left: 20px;
+                padding-right: 20px;
+                border-radius: 100vmin;
+            }

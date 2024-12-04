@@ -455,10 +455,13 @@
         function startGame() {
             applySettingsToLocalStorage();
             setTimeout(() => window.location.href = 'game.php', 1);
+<<<<<<< Updated upstream
         }
 
         function viewData() {
             setTimeout(() => window.location.href = 'user_Stats.php', 1);
+=======
+>>>>>>> Stashed changes
         }
 
         function updateTooltips() {
