@@ -8,6 +8,6 @@ Version 1.0 approved
 # Tye Maynard
 
 # Current version running at:
-https://nrs-projects.humboldt.edu/~gdw48/Type-Based/Index.php
+https://nrs-projects.humboldt.edu/~crm183/Type-Based/Index.php
 
 Updated November 7, 2024
