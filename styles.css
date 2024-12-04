@@ -1,279 +1,279 @@
-            body,
-            html {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                font-family: 'Lexend Deca', Arial, Helvetica, sans-serif;
-                background-color: #f2f3f5;
-                overflow: hidden;
-            }
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: 'Lexend Deca', Arial, Helvetica, sans-serif;
+    background-color: #f2f3f5;
+    overflow: hidden;
+}
 
-            body {
-                opacity: 0%;
-                transition: all 0.5s;
-            }
+body {
+    opacity: 0%;
+    transition: all 0.5s;
+}
 
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            p,
-            a,
-            button {
-                font-family: 'Lexend Deca', sans-serif;
-            }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+button {
+    font-family: 'Lexend Deca', sans-serif;
+}
 
-            #menuLogo {
-                font-size: 150px;
-                margin: 10px;
-                margin-top: 50px;
-                font-family: 'Lexend Deca', sans-serif;
-            }
+#menuLogo {
+    font-size: 150px;
+    margin: 10px;
+    margin-top: 50px;
+    font-family: 'Lexend Deca', sans-serif;
+}
 
-            .button-container {
-                margin-top: 50px;
-            }
+.button-container {
+    margin-top: 50px;
+}
 
-            .button-container button {
-                width: 100%;
-                margin: 10px 0 0 0;
-                background-color: transparent;
-                color: black;
-                border: 5px solid black;
-                cursor: pointer;
-                font-size: 25px;
-                padding: 10px;
-                font-weight: 600;
-                position: relative;
-            }
+.button-container button {
+    width: 100%;
+    margin: 10px 0 0 0;
+    background-color: transparent;
+    color: black;
+    border: 5px solid black;
+    cursor: pointer;
+    font-size: 25px;
+    padding: 10px;
+    font-weight: 600;
+    position: relative;
+}
 
-            .config-container {
-                border: 5px solid black;
-                height: 100%;
-            }
+.config-container {
+    border: 5px solid black;
+    height: 100%;
+}
 
-            .button-container button i {
-                float: left;
-                position: absolute;
-                left: 0;
-                margin-left: 10px;
-            }
+.button-container button i {
+    float: left;
+    position: absolute;
+    left: 0;
+    margin-left: 10px;
+}
 
-            .w3-container.w3-half {
-                height: 100%;
-                padding: 20px;
-            }
+.w3-container.w3-half {
+    height: 100%;
+    padding: 20px;
+}
 
-            table {
-                width: 100%;
-                height: 100%;
-            }
+table {
+    width: 100%;
+    height: 100%;
+}
 
-            table tr td {
-                padding: 10px;
-                margin: 0px;
+table tr td {
+    padding: 10px;
+    margin: 0px;
 
-            }
+}
 
-            table tr td i {
-                font-size: 17.5px;
-                vertical-align: middle;
-                color: #7a7a7a;
-            }
+table tr td i {
+    font-size: 17.5px;
+    vertical-align: middle;
+    color: #7a7a7a;
+}
 
-            table tr td span {
-                vertical-align: middle;
-                margin-left: 5px;
-            }
+table tr td span {
+    vertical-align: middle;
+    margin-left: 5px;
+}
 
-            table tr td p {
-                font-size: 12.5px;
-                margin: 0;
-                color: #7a7a7a;
-                display: inline;
-            }
+table tr td p {
+    font-size: 12.5px;
+    margin: 0;
+    color: #7a7a7a;
+    display: inline;
+}
 
-            table tr:nth-child(even) {
-                background-color: #dfe3e8;
-            }
+table tr:nth-child(even) {
+    background-color: #dfe3e8;
+}
 
-            table tr:nth-child(even) .w3-blurb {
-                background-color: #ced4db;
-                margin-top: 10px;
-                padding: 7.5px;
-                line-height: normal;
-                padding-bottom: 10px;
-            }
+table tr:nth-child(even) .w3-blurb {
+    background-color: #ced4db;
+    margin-top: 10px;
+    padding: 7.5px;
+    line-height: normal;
+    padding-bottom: 10px;
+}
 
-            table tr:nth-child(even) .w3-blurb i {
-                color: #7a7a7a;
-                font-size: 15px;
-                font-weight: 900;
-            }
+table tr:nth-child(even) .w3-blurb i {
+    color: #7a7a7a;
+    font-size: 15px;
+    font-weight: 900;
+}
 
-            table tr:nth-child(odd) .w3-blurb {
-                background-color: #dfe3e8;
-                margin-top: 10px;
-                padding: 7.5px;
-                line-height: normal;
-                padding-bottom: 10px;
-            }
+table tr:nth-child(odd) .w3-blurb {
+    background-color: #dfe3e8;
+    margin-top: 10px;
+    padding: 7.5px;
+    line-height: normal;
+    padding-bottom: 10px;
+}
 
-            table tr:nth-child(odd) {
-                background-color: #ced4db;
-            }
+table tr:nth-child(odd) {
+    background-color: #ced4db;
+}
 
-            td select {
-                float: right;
-                border: none;
-                padding: 2.5px;
-                vertical-align: middle;
-            }
+td select {
+    float: right;
+    border: none;
+    padding: 2.5px;
+    vertical-align: middle;
+}
 
-            .note {
-                display: inline-block;
-                margin: 0 20px;
-                position: relative;
-            }
+.note {
+    display: inline-block;
+    margin: 0 20px;
+    position: relative;
+}
 
-            .note.a {
-                top: -20px;
-            }
+.note.a {
+    top: -20px;
+}
 
-            .note.b {
-                top: -30px;
-            }
+.note.b {
+    top: -30px;
+}
 
-            .note.b:not(.wholeNote) {
-                transform: rotate(180deg);
-                transform-origin: 50% 70px;
-            }
+.note.b:not(.wholeNote) {
+    transform: rotate(180deg);
+    transform-origin: 50% 70px;
+}
 
-            .note.c {
-                top: 30px;
-            }
+.note.c {
+    top: 30px;
+}
 
-            .note.c:before {
-                content: "";
-                position: absolute;
-                width: 45px;
-                bottom: 10px;
-                left: -10px;
-                height: 2px;
-                background-color: black;
-            }
+.note.c:before {
+    content: "";
+    position: absolute;
+    width: 45px;
+    bottom: 10px;
+    left: -10px;
+    height: 2px;
+    background-color: black;
+}
 
-            .note.d {
-                top: 20px;
-            }
+.note.d {
+    top: 20px;
+}
 
-            .note.e {
-                top: 10px;
-            }
+.note.e {
+    top: 10px;
+}
 
-            .note.g {
-                top: -10px;
-            }
+.note.g {
+    top: -10px;
+}
 
-            .wholeNote {
-                background-image: none;
-                height: 20px;
-                width: 25px;
-            }
+.wholeNote {
+    background-image: none;
+    height: 20px;
+    width: 25px;
+}
 
-            .dottedHalfNote {
-                background-image: none;
-                height: 80px;
-                width: 40px;
-            }
+.dottedHalfNote {
+    background-image: none;
+    height: 80px;
+    width: 40px;
+}
 
-            .halfNote {
-                background-image: none;
-                height: 80px;
-                width: 25px;
-            }
+.halfNote {
+    background-image: none;
+    height: 80px;
+    width: 25px;
+}
 
-            .quarterNote {
-                background-image: none;
-                height: 80px;
-                width: 25px;
-            }
+.quarterNote {
+    background-image: none;
+    height: 80px;
+    width: 25px;
+}
 
-            .gameSpace {
-                position: absolute;
-                width: 100%;
-                bottom: 30px;
-            }
+.gameSpace {
+    position: absolute;
+    width: 100%;
+    bottom: 30px;
+}
 
-            .square {
-                position: absolute;
-                border-radius: 100%;
-                transition: all 0.5s;
-                width: 50px;
-                height: 50px;
-                align-content: center;
-                justify-items: center;
-                display: grid;
-                font-size: 30px;
-                font-family: 'Lexend Deca', sans-serif;
-                font-weight: 900;
-                z-index:1;
-                opacity: 1;
-            }
+.square {
+    position: absolute;
+    border-radius: 100%;
+    transition: all 0.5s;
+    width: 50px;
+    height: 50px;
+    align-content: center;
+    justify-items: center;
+    display: grid;
+    font-size: 30px;
+    font-family: 'Lexend Deca', sans-serif;
+    font-weight: 900;
+    z-index:1;
+    opacity: 1;
+}
 
-            #squareBorder {
-                background-color: transparent;
-                height: 100%;
-                position: absolute;
-                top: 0px;
-                left: 0;
-                z-index: 0;
-                background-image: url("FrontEnd/clef.jpg");
-                background-size: cover;
-                width: 200px;
-                border-radius: 0px 25px 25px 0px;
-                overflow:hidden;
-            }
+#squareBorder {
+    background-color: transparent;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    z-index: 0;
+    background-image: url("FrontEnd/clef.jpg");
+    background-size: cover;
+    width: 200px;
+    border-radius: 0px 25px 25px 0px;
+    overflow:hidden;
+}
 
-            #squareBorderGradient {
-                width: 100%;
-                height: 100%;
-                background-image: linear-gradient(to right, #ffffff00, #ff000050, #00800050, #ffffff00);
-            }
-            
-            #gameWord {
-                position: absolute;
-                justify-content: center;
-                font-weight: 600;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                height: 33.333vh;
-                font-size: 60px;
-            }
+#squareBorderGradient {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, #ffffff00, #ff000050, #00800050, #ffffff00);
+}
 
-            #gameWord span {
-                margin: 10px;
-                transition: all 0.5s 0s, filter 0.5s 1s;
-                color:black;
-            }
+#gameWord {
+    position: absolute;
+    justify-content: center;
+    font-weight: 600;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 33.333vh;
+    font-size: 60px;
+}
 
-            #gameStartButton {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%,-50%);
-                border: 1500px solid #ffffff50;
-                z-index: 1000;
-                background-color: #ffffff50;
-                backdrop-filter: blur(5px);
-                cursor: pointer;
-                font-size: 30px;
-                white-space: nowrap;
-                padding: 15px;
-                padding-left: 20px;
-                padding-right: 20px;
-                border-radius: 100vmin;
-            }
+#gameWord span {
+    margin: 10px;
+    transition: all 0.5s 0s, filter 0.5s 1s;
+    color:black;
+}
+
+#gameStartButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: 1500px solid #ffffff50;
+    z-index: 1000;
+    background-color: #ffffff50;
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    font-size: 30px;
+    white-space: nowrap;
+    padding: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 100vmin;
+}

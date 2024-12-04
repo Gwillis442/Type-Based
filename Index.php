@@ -115,8 +115,8 @@
                             <span>Song Select</span>
                             <select name="song" id="songSelect">
                                 <option value="song1">Song 1</option>
-                                <option value="song2">Song 2</option>
-                                <option value="song3">Song 3</option>
+                                <option disabled value="song2">Song 2</option>
+                                <option disabled value="song3">Song 3</option>
                             </select>
                         </td>
                     </tr>
@@ -455,13 +455,10 @@
         function startGame() {
             applySettingsToLocalStorage();
             setTimeout(() => window.location.href = 'game.php', 1);
-<<<<<<< Updated upstream
         }
 
         function viewData() {
             setTimeout(() => window.location.href = 'user_Stats.php', 1);
-=======
->>>>>>> Stashed changes
         }
 
         function updateTooltips() {

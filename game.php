@@ -1,3 +1,7 @@
+<?php
+    session_start();
+
+?>  
 <!DOCTYPE html>
 <html>
 
@@ -69,17 +73,25 @@
     <div class="titleBar">
         <div class="titleHPBar">
             <i class="ri-heart-fill"></i>
-            <i class="ri-heart-fill"></i>
-            <i class="ri-heart-fill"></i>
+            <i class="ri-heart-line"></i>
+            <i class="ri-heart-line"></i>
         </div>
         <div class="flex-end">
+
+            <div class="titleWidget">
+                <p>
+                    <i class="ri-star-fill"></i>
+                    <span id="score">0</span>
+                </p>
+            </div>
+
             <div class="titleWidget">
                 <p>
                     <i class="ri-play-fill"></i>
                     <span id="selectedMode">Mode Select</span>
                 </p>
             </div>
-            <div class="titleWidget">
+            <div style = "display:none" class="titleWidget">
                 <p>
                     <i class="ri-album-fill"></i>
                     <span id="selectedSong">Song Select</span>
@@ -106,7 +118,7 @@
 
     <div class="gameSpace">
 
-        <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="100%" height="200" viewBox="0, 0, 100%, auto">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="100%" height="200" viewBox="0 0 100 200" preserveAspectRatio="none">
             <line x1="0" y1="30" x2="100%" y2="30" stroke-width="7.5px" stroke="black" />
             <line x1="0" y1="70" x2="100%" y2="70" stroke-width="7.5px" stroke="black" />
             <line x1="0" y1="110" x2="100%" y2="110" stroke-width="7.5px" stroke="black" />
@@ -151,6 +163,11 @@
 
         var squareTransitionProperty = "left 5s linear";
         var squareBPMProperty = 120;
+
+        var squaresSent = 0;
+        var squaresCorrect = 0;
+
+        var userAccuracy = 0;
 
         function displaySettingsObject() {
             if (localStorage.getItem("settingsObject") == null) {
@@ -222,6 +239,14 @@
 
         }
 
+        var score = 0;
+
+        function updateScore(points) {
+            score += points
+            console.log(score);
+            document.getElementById("score").innerHTML = score;
+        }
+
         function triggerAnimation(square, animationClass) {
             var squareElement = document.getElementById(square);
             squareElement.style.animation = "none"; // Reset animation
@@ -246,25 +271,31 @@
             console.log(selectedWordArray);
 
             squares.forEach(function (square, index) {
-                document.getElementById(`${square}contents`).innerHTML = selectedWordArray[index].toUpperCase();
+            document.getElementById(`${square}contents`).innerHTML = selectedWordArray[index].toUpperCase();
             });
 
             setupZoneObserver(squares, activeSquares);
             setupGlobalInputListener(squares, activeSquares, userInputs);
 
             var interval = setInterval(function () {
-                if (sentSquares.size < squares.length) {
-                    var availableSquares = squares.filter(square => !sentSquares.has(square));
-                    if (availableSquares.length > 0) {
-                        var randomIndex = Math.floor(Math.random() * availableSquares.length);
-                        var selectedSquare = availableSquares[randomIndex];
-                        sendSquare(selectedSquare);
-                        sentSquares.add(selectedSquare);
-                        activeSquares.add(selectedSquare);
-                    }
-                } else {
-                    clearInterval(interval);
+            if (sentSquares.size < squares.length) {
+                var availableSquares = squares.filter(square => !sentSquares.has(square));
+                if (availableSquares.length > 0) {
+                var randomIndex = Math.floor(Math.random() * availableSquares.length);
+                var selectedSquare = availableSquares[randomIndex];
+                sendSquare(selectedSquare);
+                squaresSent++;
+                sentSquares.add(selectedSquare);
+                activeSquares.add(selectedSquare);
                 }
+            } else {
+                clearInterval(interval);
+            }
+
+            // Speed up the interval gradually
+            if (squareInterval > 1000) { // Set a minimum interval limit
+                squareInterval *= 0.975; // Decrease interval by 2.5%
+            }
             }, squareInterval);
         }
 
@@ -293,6 +324,7 @@
             });
         }
 
+
         function setupGlobalInputListener(squares, activeSquares, userInputs) {
             document.removeEventListener('keydown', onKeyPress);
             document.addEventListener('keydown', onKeyPress);
@@ -306,6 +338,8 @@
                         if (userLetter === correctLetter) {
                             userInputs[square] = true;
                             triggerAnimation(square, "tada");
+                            squaresCorrect++;
+                            updateScore(100);
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.color = "green";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.filter = "opacity(0%)";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.animation = "hinge 1.5s 1";
@@ -348,6 +382,22 @@
             }
         }
 
+        function sendScore(){
+            // Send the score and difficulty to set_user_stats.php
+            var difficulty = settings.mode.toLowerCase();
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "./BackEnd/set_User_Stats.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log("Score and difficulty sent successfully");
+                }
+            };
+            console.log("Sending score:", score, "and difficulty:", difficulty, "and wpm:", userAccuracy);
+            xhr.send("score=" + encodeURIComponent(score) + "&difficulty=" + encodeURIComponent(difficulty) + "&wpm=" + encodeURIComponent(userAccuracy));
+        }
+
         function sendSquare(square) {
             var squareElement = document.getElementById(square);
             squareElement.style.transition = squareTransitionProperty;
@@ -364,20 +414,27 @@
         }
 
         function userLoses() {
-    // Let's get how many heart elements the user has in titleHPBar
-    var heartElements = document.getElementsByClassName("ri-heart-fill");
+    // Get a static array of heart elements
+    var heartElements = Array.from(document.getElementsByClassName("ri-heart-fill"));
     var heartCount = heartElements.length;
 
     // Check if the player has no hearts left
     if (heartCount <= 0) {
         document.body.style.transition = "opacity 5s";
         document.body.style.opacity = 0;
+        userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
+        console.log("User accuracy: " + userAccuracy + "%");
+        sendScore();
         setTimeout(function () {
-            window.location.href = "Index.php";
-        }, 5000);
+            window.location.href = "user_Stats.php";
+        }, 2500);
     } else {
-        // Remove the last heart element
-        heartElements[heartCount - 1].classList.remove("ri-heart-fill");
+        // Replace the last heart element with a heart-line element
+        var lastHeart = heartElements[heartCount - 1];
+        lastHeart.classList.remove("ri-heart-fill");
+        lastHeart.classList.add("ri-heart-line");
+
+        // Trigger animation and color change for the word
         document.getElementById('gameWord').style.animation = "shakeX 1s 1";
         document.getElementById('letter1').style.color = "red";
         document.getElementById('letter2').style.color = "red";
@@ -387,11 +444,12 @@
 
         setTimeout(resetWord, 1500);
     }
-}
 
+    // Update accuracy after the event
+    userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
+}
         function userWins() {
             setTimeout(function () {
-
                 document.getElementById('gameWord').style.animation = "bounce 1s 1";
                 document.getElementById('gameWord').style.color = "green";
 
@@ -457,7 +515,6 @@
         }, 1);
     }, 1000);
 }
-
 
     </script>
     <script src="five-letter-words.js"></script>
