@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>  
 <!DOCTYPE html>
 <html>
 
@@ -106,7 +109,7 @@
 
     <div class="gameSpace">
 
-        <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="100%" height="200" viewBox="0, 0, 100%, auto">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="100%" height="200" viewBox="0 0 100 200">
             <line x1="0" y1="30" x2="100%" y2="30" stroke-width="7.5px" stroke="black" />
             <line x1="0" y1="70" x2="100%" y2="70" stroke-width="7.5px" stroke="black" />
             <line x1="0" y1="110" x2="100%" y2="110" stroke-width="7.5px" stroke="black" />
@@ -220,6 +223,13 @@
             document.getElementById("letter5").innerHTML = selected_word[4].toUpperCase();
             return selected_word;
 
+        }
+
+        var score = 0;
+
+        function updateScore(points) {
+            score += points
+            document.getElementById("score").innerHTML = "Score: " + score;
         }
 
         function triggerAnimation(square, animationClass) {
