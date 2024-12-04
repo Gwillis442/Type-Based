@@ -53,19 +53,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         oci_bind_by_name($update_stmt, ':score', $score);
         oci_bind_by_name($update_stmt, ':user_id', $user_id);
         oci_execute($update_stmt);
-
-        // Increment the total games played
-        $increment_query = 'UPDATE typing_stats SET total_games_' . $difficulty . ' = total_games_' . $difficulty . ' + 1 WHERE user_id = :user_id';
-        $increment_stmt = oci_parse($conn, $increment_query);
-        oci_bind_by_name($increment_stmt, ':user_id', $user_id);
-        if (oci_execute($increment_stmt)) {
-            error_log("Total games played incremented successfully");
-        } else {
-            $e = oci_error($increment_stmt);
-            error_log("Error incrementing total games played: " . $e['message']);
-        }
-
     }
+
+    // Increment the total games played
+    $increment_query = 'UPDATE typing_stats SET total_games_' . $difficulty . ' = total_games_' . $difficulty . ' + 1 WHERE user_id = :user_id';
+    $increment_stmt = oci_parse($conn, $increment_query);
+    oci_bind_by_name($increment_stmt, ':user_id', $user_id);
+    if (oci_execute($increment_stmt)) {
+        error_log("Total games played incremented successfully");
+    } else {
+        $e = oci_error($increment_stmt);
+        error_log("Error incrementing total games played: " . $e['message']);
+    }
+    
 
     // Close the connection
     oci_close($conn);
