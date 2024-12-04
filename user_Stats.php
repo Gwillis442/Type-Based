@@ -45,7 +45,6 @@
     $user_stats = get_user_stats($conn, $user_id);
 
     // Assign variables
-    $wpm = $user_stats['WPM'] ?? 'N/A';
     $totalGamesEasy = $user_stats['TOTAL_GAMES_EASY'] ?? 'N/A';
     $totalGamesMedium = $user_stats['TOTAL_GAMES_MEDIUM'] ?? 'N/A';
     $totalGamesHard = $user_stats['TOTAL_GAMES_HARD'] ?? 'N/A';
@@ -56,7 +55,6 @@
 
     
     <h2>User Stats for: <?= htmlentities($username) ?></h2>
-    <p>WPM: <?= htmlentities($wpm) ?></p>
     <p>Total Games (Easy): <?= htmlentities($totalGamesEasy) ?></p>
     <p>Total Games (Medium): <?= htmlentities($totalGamesMedium) ?></p>
     <p>Total Games (Hard): <?= htmlentities($totalGamesHard) ?></p>

@@ -1,5 +1,6 @@
 <?php
     session_start();
+
 ?>  
 <!DOCTYPE html>
 <html>
@@ -229,7 +230,8 @@
 
         function updateScore(points) {
             score += points
-            document.getElementById("score").innerHTML = "Score: " + score;
+            console.log(score);
+            //document.getElementById("score").innerHTML = "Score: " + score;
         }
 
         function triggerAnimation(square, animationClass) {
@@ -316,6 +318,7 @@
                         if (userLetter === correctLetter) {
                             userInputs[square] = true;
                             triggerAnimation(square, "tada");
+                            updateScore(100);
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.color = "green";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.filter = "opacity(0%)";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.animation = "hinge 1.5s 1";
@@ -349,13 +352,31 @@
 
                     if (allCorrect) {
                         console.log("You win!");
+                        updateScore(250);
                         userWins();
                     } else {
                         console.log("You lose!");
+                        updateScore(-50);
                         userLoses();
                     }
                 }
             }
+        }
+
+        function sendScore(){
+            // Send the score and difficulty to set_user_stats.php
+            var difficulty = settings.mode.toLowerCase();
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "./BackEnd/set_User_Stats.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log("Score and difficulty sent successfully");
+                }
+            };
+            console.log("Sending score:", score, "and difficulty:", difficulty);
+            xhr.send("score=" + encodeURIComponent(score) + "&difficulty=" + encodeURIComponent(difficulty));
         }
 
         function sendSquare(square) {
@@ -383,10 +404,12 @@
         document.body.style.transition = "opacity 5s";
         document.body.style.opacity = 0;
         setTimeout(function () {
+            sendScore();
             window.location.href = "Index.php";
         }, 5000);
     } else {
         // Remove the last heart element
+        updateScore(-50);
         heartElements[heartCount - 1].classList.remove("ri-heart-fill");
         document.getElementById('gameWord').style.animation = "shakeX 1s 1";
         document.getElementById('letter1').style.color = "red";
@@ -401,7 +424,7 @@
 
         function userWins() {
             setTimeout(function () {
-
+                sendScore();
                 document.getElementById('gameWord').style.animation = "bounce 1s 1";
                 document.getElementById('gameWord').style.color = "green";
 
@@ -467,7 +490,6 @@
         }, 1);
     }, 1000);
 }
-
 
     </script>
     <script src="five-letter-words.js"></script>

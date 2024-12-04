@@ -8,7 +8,7 @@ require_once("./hum_conn_no_login.php");
 ini_set('display_errors', 1);
 ini_set('display_errors', 1);
 
-function check_high_score($conn, $user_id, $score_easy, $score_medium, $score_hard)
+function check_high_score($conn, $user_id, $score, $difficulty)
 {
     // Prepare the SQL query to fetch user stats from typing_stats table
     $query = '
@@ -25,104 +25,46 @@ function check_high_score($conn, $user_id, $score_easy, $score_medium, $score_ha
 
     $row = oci_fetch_assoc($stmt);
 
-    if($score_easy > $row['HIGH_SCORE_EASY']) {
+
+    if ($difficulty === 'easy' && $score > $row['HIGH_SCORE_EASY']) {
         return true;
-    } else if($score_medium > $row['HIGH_SCORE_MEDIUM']) {
+    } else if ($difficulty === 'medium' && $score > $row['HIGH_SCORE_MEDIUM']) {
         return true;
-    } else if($score_hard > $row['HIGH_SCORE_HARD']) {
+    } else if ($difficulty === 'hard' && $score > $row['HIGH_SCORE_HARD']) {
         return true;
     } else {
         return false;
     }
 }
 
-function set_user_stats_easy($conn, $user_id, $wpm, $score_easy)
-{
-    // Prepare the SQL query to update user stats in typing_stats table
-    $query = '
-        UPDATE 
-            typing_stats
-        SET 
-            wpm = :wpm, total_games_easy = :total_games_easy + 1, high_score_easy = :high_score_easy
-        WHERE 
-            user_id = :user_id';
 
-    $stmt = oci_parse($conn, $query);
-    oci_bind_by_name($stmt, ':user_id', $user_id);
-    oci_bind_by_name($stmt, ':wpm', $wpm);
-    if(check_high_score($conn, $user_id, $score_easy, null, null)) {
-        oci_bind_by_name($stmt, ':high_score_easy', $score_easy);
-    } else {
-        oci_bind_by_name($stmt, ':high_score_easy', $row['HIGH_SCORE_EASY']);
-    }
-    oci_execute($stmt);
-}
-
-function set_user_stats_medium($conn, $user_id, $wpm, $high_score_medium)
-{
-    // Prepare the SQL query to update user stats in typing_stats table
-    $query = '
-        UPDATE 
-            typing_stats
-        SET 
-            wpm = :wpm, total_games_medium = :total_games_medium + 1, high_score_medium = :high_score_medium
-        WHERE 
-            user_id = :user_id';
-
-    $stmt = oci_parse($conn, $query);
-    oci_bind_by_name($stmt, ':user_id', $user_id);
-    oci_bind_by_name($stmt, ':wpm', $wpm);
-    if(check_high_score($conn, $user_id, null, $score_medium, null)) {
-        oci_bind_by_name($stmt, ':high_score_medium', $score_medium);
-    } else {
-        oci_bind_by_name($stmt, ':high_score_medium', $row['HIGH_SCORE_MEDIUM']);
-    }
-
-    oci_execute($stmt);
-}
-
-function set_user_stats_hard($conn, $user_id, $wpm, $high_score_hard)
-{
-    // Prepare the SQL query to update user stats in typing_stats table
-    $query = '
-        UPDATE 
-            typing_stats
-        SET 
-            wpm = :wpm, total_games_hard = :total_games_hard + 1, high_score_hard = :high_score_hard
-        WHERE 
-            user_id = :user_id';
-
-    $stmt = oci_parse($conn, $query);
-    oci_bind_by_name($stmt, ':user_id', $user_id);
-    oci_bind_by_name($stmt, ':wpm', $wpm);
-    if(check_high_score($conn, $user_id, null, null, $score_hard)) {
-        oci_bind_by_name($stmt, ':high_score_hard', $score_hard);
-    } else {
-        oci_bind_by_name($stmt, ':high_score_hard', $row['HIGH_SCORE_HARD']);
-    }
-    oci_execute($stmt);
-}
-
-if($_Server['REQUEST_METHOD'] == 'POST')
+if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
     $conn = hum_conn_no_login();
-
-    // Retrieve and sanitize form data
-    $user_id = htmlspecialchars($_POST['user_id']);
-    $wpm = htmlspecialchars($_POST['wpm']);
-    $score_easy = htmlspecialchars($_POST['score_easy']);
-    $score_medium = htmlspecialchars($_POST['score_medium']);
-    $score_hard = htmlspecialchars($_POST['score_hard']);
+    $user_id = $_SESSION['user_id'];
+    $score = $_POST['score'];
+    $difficulty = $_POST['difficulty'];
 
     // Update the user stats
-    if($score_easy != null) {
-    set_user_stats_easy($conn, $user_id, $wpm, $score_easy);
-    } else if($score_medium != null) {
-    set_user_stats_medium($conn, $user_id, $wpm, $score_medium);
-    } else if($score_hard != null) {
-    set_user_stats_hard($conn, $user_id, $wpm, $score_hard);
-    } else {
-        echo "Error: No high score found";
+    if (check_high_score($conn, $user_id, $score, $difficulty)) {
+        // Update the high score
+        $update_query = 'UPDATE typing_stats SET high_score_' . $difficulty . ' = :score WHERE user_id = :user_id';
+        $update_stmt = oci_parse($conn, $update_query);
+        oci_bind_by_name($update_stmt, ':score', $score);
+        oci_bind_by_name($update_stmt, ':user_id', $user_id);
+        oci_execute($update_stmt);
+
+        // Increment the total games played
+        $increment_query = 'UPDATE typing_stats SET total_games_' . $difficulty . ' = total_games_' . $difficulty . ' + 1 WHERE user_id = :user_id';
+        $increment_stmt = oci_parse($conn, $increment_query);
+        oci_bind_by_name($increment_stmt, ':user_id', $user_id);
+        if (oci_execute($increment_stmt)) {
+            error_log("Total games played incremented successfully");
+        } else {
+            $e = oci_error($increment_stmt);
+            error_log("Error incrementing total games played: " . $e['message']);
+        }
+
     }
 
     // Close the connection
