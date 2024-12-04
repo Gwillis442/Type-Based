@@ -318,7 +318,6 @@
                         if (userLetter === correctLetter) {
                             userInputs[square] = true;
                             triggerAnimation(square, "tada");
-                            updateScore(100);
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.color = "green";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.filter = "opacity(0%)";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.animation = "hinge 1.5s 1";
@@ -352,7 +351,7 @@
 
                     if (allCorrect) {
                         console.log("You win!");
-                        updateScore(250);
+                        updateScore(100);
                         userWins();
                     } else {
                         console.log("You lose!");
@@ -409,7 +408,6 @@
         }, 5000);
     } else {
         // Remove the last heart element
-        updateScore(-50);
         heartElements[heartCount - 1].classList.remove("ri-heart-fill");
         document.getElementById('gameWord').style.animation = "shakeX 1s 1";
         document.getElementById('letter1').style.color = "red";
@@ -424,7 +422,6 @@
 
         function userWins() {
             setTimeout(function () {
-                sendScore();
                 document.getElementById('gameWord').style.animation = "bounce 1s 1";
                 document.getElementById('gameWord').style.color = "green";
 
