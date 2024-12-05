@@ -1,14 +1,9 @@
 <?php
 session_start();
-require_once("./BackEnd/hum_conn_no_login.php");
+require_once("../BackEnd/hum_conn_no_login.php");
 ini_set('display_errors', 1);
 error_reporting(E_ALL); // Enable all error reporting
 
-// Ensure the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: Index.php");
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +19,7 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.5.0/remixicon.css"
         integrity="sha512-6p+GTq7fjTHD/sdFPWHaFoALKeWOU9f9MPBoPnvJEWBkGS4PKVVbCpMps6IXnTiXghFbxlgDE8QRHc3MU91lJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
     <style>
         #username {

@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.5.0/remixicon.css"
         integrity="sha512-6p+GTq7fjTHD/sdFPWHaFoALKeWOU9f9MPBoPnvJEWBkGS4PKVVbCpMps6IXnTiXghFbxlgDE8QRHc3MU91lJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
 
     <style>
@@ -454,11 +454,11 @@
 
         function startGame() {
             applySettingsToLocalStorage();
-            setTimeout(() => window.location.href = 'game.php', 1);
+            setTimeout(() => window.location.href = 'FrontEnd/game.php', 1);
         }
 
         function viewData() {
-            setTimeout(() => window.location.href = 'user_Stats.php', 1);
+            setTimeout(() => window.location.href = 'FrontEnd/user_Stats.php', 1);
         }
 
         function updateTooltips() {
