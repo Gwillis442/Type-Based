@@ -67,7 +67,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
         error_log("Error incrementing total games played: " . $e['message']);
     }
 
-    // update wpm 
+    // Update wpm 
     $wpm_query = 'UPDATE typing_stats SET wpm = :accuracy WHERE user_id = :user_id';
     $wpm_stmt = oci_parse($conn, $wpm_query);
     oci_bind_by_name($wpm_stmt, ':user_id', $user_id);

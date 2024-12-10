@@ -413,7 +413,7 @@
             const password = document.getElementById('createAccountPassword').value;
 
             if (username && password) {
-                // Submit the form to User_Authentication.php for server-side authentication
+                // Submit the form to User_Authentication.php for authentication
                 document.getElementById('createAccountForm').submit();
             } else {
                 alert('Please enter all required information.');

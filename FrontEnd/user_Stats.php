@@ -2,7 +2,6 @@
 session_start();
 require_once("../BackEnd/hum_conn_no_login.php");
 ini_set('display_errors', 1);
-error_reporting(E_ALL); // Enable all error reporting
 
 ?>
 <!DOCTYPE html>
