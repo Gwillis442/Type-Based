@@ -1,8 +1,11 @@
 <?php
 /*
-    by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 2026-10-13
-*/
+ * by: Chan Rain, Garrett Willis, Kevin Tieu
+ * Type-Based
+ *
+ * User_Creation.php
+ * Creates a profile, account, stats row, and default config for a new player.
+ */
 session_start();
 require_once("hum_conn_no_login.php");
 ini_set('display_errors', 1);

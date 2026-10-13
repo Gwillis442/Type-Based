@@ -1,8 +1,11 @@
 <?php
 /*
-    by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 2024-03-28
-*/
+ * by: Chan Rain, Garrett Willis, Kevin Tieu
+ * Type-Based
+ *
+ * hum_conn_no_login.php
+ * Opens the Humboldt Oracle connection used by the PHP scripts.
+ */
     /*-----
         function: hum_conn_no_login: void -> connection
         purpose: expects nothing,

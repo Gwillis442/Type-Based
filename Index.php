@@ -1,4 +1,11 @@
 <?php
+/*
+ * by: Chan Rain, Garrett Willis, Kevin Tieu
+ * Type-Based
+ *
+ * Index.php
+ * Main menu: mode and song selection, sign-in, and account creation.
+ */
     session_start();
     require_once("./BackEnd/hum_conn_no_login.php");
 ?>

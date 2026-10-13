@@ -1,8 +1,10 @@
 /*
-    by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 2026-10-13
-*/
-
+ * by: Chan Rain, Garrett Willis, Kevin Tieu
+ * Type-Based
+ *
+ * styles.css
+ * Layout and controls for the menu, game, and stats pages.
+ */
 body,
 html {
     width: 100%;

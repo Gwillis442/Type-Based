@@ -1,8 +1,11 @@
 <?php
 /*
-    by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 2026-10-13
-*/
+ * by: Chan Rain, Garrett Willis, Kevin Tieu
+ * Type-Based
+ *
+ * game.php
+ * Runs one typing round: word selection, falling squares, scoring, and the end-of-round summary.
+ */
     session_start();
 
 ?>  
@@ -68,6 +71,17 @@
 </head>
 
 <body>
+
+    <div id="roundSummary" style="display:none; position:fixed; inset:0; background:rgba(242,243,245,0.96); z-index:20; align-items:center; justify-content:center;">
+        <div style="text-align:center; font-family:'Lexend Deca', sans-serif;">
+            <h2>Round complete</h2>
+            <p>Mode: <span id="summaryMode"></span></p>
+            <p>Score: <span id="summaryScore"></span></p>
+            <p>Accuracy: <span id="summaryAccuracy"></span>%</p>
+            <button id="summaryContinue">Continue</button>
+        </div>
+    </div>
+
 
 <button id = "gameStartButton" onclick="startGame()">
     <i class="ri-play-fill"></i>
