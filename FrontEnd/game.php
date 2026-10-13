@@ -1,4 +1,8 @@
 <?php
+/*
+    by: Chan Rain, Garrett Willis, Kevin Tieu
+    last modified: 2026-10-13
+*/
     session_start();
 
 ?>  
@@ -214,7 +218,7 @@
             }
 
             if (localStorage.getItem("settingsObject") == null) {
-                window.location.href = "index.html";
+                window.location.href = "../Index.php";
             }
         }
 
@@ -384,9 +388,12 @@
 
         function sendScore(){
             // Send the score and difficulty to set_user_stats.php
-            var difficulty = settings.mode.toLowerCase();
+            var raw = (settings.mode || "easy").toLowerCase();
+            var difficulty = "easy";
+            if (raw.indexOf("med") !== -1) difficulty = "medium";
+            else if (raw.indexOf("hard") !== -1) difficulty = "hard";
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "./BackEnd/set_User_Stats.php", true);
+            xhr.open("POST", "../BackEnd/set_User_Stats.php", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
             xhr.onreadystatechange = function () {

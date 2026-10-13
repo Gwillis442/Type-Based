@@ -1,3 +1,6 @@
+-- by: Chan Rain, Garrett Willis, Kevin Tieu
+-- last modified: 2026-10-13
+
 -- start Type-Based_Design.sql
 drop table typing_stats;
 drop table user_config;

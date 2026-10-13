@@ -1,4 +1,8 @@
 <?php
+/*
+    by: Chan Rain, Garrett Willis, Kevin Tieu
+    last modified: 2026-10-13
+*/
 session_start();
 require_once("../BackEnd/hum_conn_no_login.php");
 ini_set('display_errors', 1);

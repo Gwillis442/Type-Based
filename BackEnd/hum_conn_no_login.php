@@ -1,4 +1,8 @@
 <?php
+/*
+    by: Chan Rain, Garrett Willis, Kevin Tieu
+    last modified: 2024-03-28
+*/
     /*-----
         function: hum_conn_no_login: void -> connection
         purpose: expects nothing,

@@ -1,4 +1,4 @@
-Type-Based DataBase Relation-Structure
+-- by: Chan Rain, Garrett Willis, Kevin Tieu\n-- last modified: 2026-10-13\n\nType-Based DataBase Relation-Structure
 
 user_profile(USER_ID, f_name, l_name, email)
 

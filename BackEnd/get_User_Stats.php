@@ -1,7 +1,7 @@
 <?php
 /*
     by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 11/6/2024 
+    last modified: 2026-10-13
 */
 session_start();
 require_once("./hum_conn_no_login.php");
@@ -9,42 +9,44 @@ ini_set('display_errors', 1);
 
 function get_user_stats($conn, $user_id)
 {
-    // Prepare the SQL query to fetch user stats from typing_stats table
     $query = '
         SELECT 
-            ts.wpm, ts.total_games_easy, ts.total_games_medium, ts.total_games_hard,
-            ts.high_score_easy, ts.high_score_medium, ts.high_score_hard
-        FROM 
-            typing_stats ts
-        WHERE 
-            ts.user_id = :user_id';
+            wpm, total_games_easy, total_games_medium, total_games_hard,
+            high_score_easy, high_score_medium, high_score_hard
+        FROM typing_stats
+        WHERE user_id = :user_id';
 
     $stmt = oci_parse($conn, $query);
     oci_bind_by_name($stmt, ':user_id', $user_id);
-    oci_execute($stmt);
+
+    if (!oci_execute($stmt)) {
+        return false;
+    }
 
     return oci_fetch_assoc($stmt);
 }
 
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn = hum_conn_no_login();
 
-    // Retrieve and sanitize form data
-    $user_id = htmlspecialchars($_POST['user_id']);
+    // Prefer the logged-in session user; fall back only if explicitly supplied
+    $user_id = $_SESSION['user_id'] ?? filter_input(INPUT_POST, 'user_id', FILTER_SANITIZE_STRING);
 
-    // Get the user stats
+    if (empty($user_id)) {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'No user identified.']);
+        exit;
+    }
+
     $user_stats = get_user_stats($conn, $user_id);
 
-    // Display the user stats
+    header('Content-Type: application/json');
     if ($user_stats) {
-        header('Content-Type: application/json');
         echo json_encode($user_stats);
     } else {
         echo json_encode(['error' => 'No stats found for this user.']);
     }
 
-    // Close the connection
     oci_close($conn);
 }
 ?>

@@ -1,9 +1,9 @@
 # Type-Based
 # Procrasti-Nation
 Version 1.0 approved
-# Prepared by: 
-# Garrett Willis 
-# Chan Rain 
+# Prepared by:
+# Chan Rain
+# Garrett Willis
 # Kevin Tieu
 # Tye Maynard
 

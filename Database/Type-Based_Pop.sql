@@ -1,3 +1,6 @@
+-- by: Chan Rain, Garrett Willis, Kevin Tieu
+-- last modified: 2026-10-13
+
 -- start Type-Based_Pop.sql
 --Testing Insertion into Type-Based Database
 set wrap off

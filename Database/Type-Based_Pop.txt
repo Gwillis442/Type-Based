@@ -1,4 +1,4 @@
-rows will be truncated
+-- by: Chan Rain, Garrett Willis, Kevin Tieu\n-- last modified: 2026-10-13\n\nrows will be truncated
 
 
 USER_ID              FIRST_NAME                                         LAS
