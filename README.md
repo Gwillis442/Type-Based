@@ -1,3 +1,5 @@
+![Type-Based](Assets/images/type-based-logo.jpg)
+
 # Type-Based
 
 A browser typing game with falling letters, difficulty modes, accounts, and player statistics.
