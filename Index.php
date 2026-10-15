@@ -78,7 +78,7 @@
 <body>
 
     <div class="w3-container w3-half">
-        <h1 id="menuLogo"><img src="Assets/images/type-based-logo.png" alt="Type-Based"></h1>
+        <h1 id="menuLogo">LOGO</h1>
         <div class="w3-container button-container">
 
             <button id="menuPlayButton" onclick="startGame()">

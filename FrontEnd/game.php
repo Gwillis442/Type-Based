@@ -400,6 +400,13 @@
             }
         }
 
+
+        function fillRoundSummary() {
+            document.getElementById("summaryMode").textContent = settings.mode || "Easy";
+            document.getElementById("summaryScore").textContent = score;
+            document.getElementById("summaryAccuracy").textContent = userAccuracy;
+        }
+
         function sendScore(){
             // Send the score and difficulty to set_user_stats.php
             var raw = (settings.mode || "easy").toLowerCase();
