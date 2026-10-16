@@ -453,9 +453,8 @@
         userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
         console.log("User accuracy: " + userAccuracy + "%");
         sendScore();
-        setTimeout(function () {
-            window.location.href = "user_Stats.php";
-        }, 2500);
+        fillRoundSummary();
+        document.getElementById("roundSummary").style.display = "flex";
     } else {
         // Replace the last heart element with a heart-line element
         var lastHeart = heartElements[heartCount - 1];
