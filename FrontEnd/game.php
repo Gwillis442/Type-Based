@@ -78,7 +78,7 @@
             <p>Mode: <span id="summaryMode"></span></p>
             <p>Score: <span id="summaryScore"></span></p>
             <p>Accuracy: <span id="summaryAccuracy"></span>%</p>
-            <button id="summaryContinue">Continue</button>
+            <button id="summaryContinue" onclick="continueAfterSummary()">Continue</button>
         </div>
     </div>
 
@@ -405,6 +405,11 @@
             document.getElementById("summaryMode").textContent = settings.mode || "Easy";
             document.getElementById("summaryScore").textContent = score;
             document.getElementById("summaryAccuracy").textContent = userAccuracy;
+        }
+
+
+        function continueAfterSummary() {
+            window.location.href = "user_Stats.php";
         }
 
         function sendScore(){
