@@ -277,6 +277,14 @@
             squareElement.style.animation = `${animationClass} 0.5s 1`; // Apply new animation
         }
 
+
+        var gamePaused = false;
+        var roundTimer = null;
+        function togglePause() {
+            gamePaused = !gamePaused;
+            document.getElementById("pauseButton").textContent = gamePaused ? "Resume" : "Pause";
+        }
+
         function startGame() {
 
             document.getElementById('gameStartButton').style.display = "none";
@@ -300,7 +308,8 @@
             setupZoneObserver(squares, activeSquares);
             setupGlobalInputListener(squares, activeSquares, userInputs);
 
-            var interval = setInterval(function () {
+            roundTimer = setInterval(function () {
+            if (gamePaused) { return; }
             if (sentSquares.size < squares.length) {
                 var availableSquares = squares.filter(square => !sentSquares.has(square));
                 if (availableSquares.length > 0) {
@@ -320,6 +329,7 @@
                 squareInterval *= 0.975; // Decrease interval by 2.5%
             }
             }, squareInterval);
+            var interval = roundTimer;
         }
 
         let observer; // Declare globally to track the observer.
