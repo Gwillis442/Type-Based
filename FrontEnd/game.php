@@ -83,6 +83,11 @@
     </div>
 
 
+
+    <div id="roundControls" style="position:fixed; top:12px; right:12px; z-index:15;">
+        <button id="pauseButton" onclick="togglePause()">Pause</button>
+    </div>
+
 <button id = "gameStartButton" onclick="startGame()">
     <i class="ri-play-fill"></i>
     <span>PLAY GAME</span>

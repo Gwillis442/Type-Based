@@ -37,4 +37,4 @@ Type-Based
 ## License
 See `LICENSE`.
 
-**Last updated:** October 15, 2026
+**Last updated:** October 17, 2026
