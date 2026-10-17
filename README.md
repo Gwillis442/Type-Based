@@ -37,4 +37,8 @@ Type-Based
 ## License
 See `LICENSE`.
 
+<<<<<<< HEAD
 **Last updated:** October 17, 2026
+=======
+**Last updated:** October 16, 2026
+>>>>>>> b0b847e422a1e6590ddab8306d1dc7d1835c6f9f
