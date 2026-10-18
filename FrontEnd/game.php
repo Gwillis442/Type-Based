@@ -86,6 +86,7 @@
 
     <div id="roundControls" style="position:fixed; top:12px; right:12px; z-index:15;">
         <button id="pauseButton" onclick="togglePause()">Pause</button>
+        <button id="restartButton" onclick="restartRound()">Restart</button>
     </div>
 
 <button id = "gameStartButton" onclick="startGame()">
@@ -285,6 +286,17 @@
             document.getElementById("pauseButton").textContent = gamePaused ? "Resume" : "Pause";
         }
 
+
+        function restartRound() {
+            if (roundTimer) { clearInterval(roundTimer); roundTimer = null; }
+            gamePaused = false;
+            score = 0;
+            squaresSent = 0;
+            squaresCorrect = 0;
+            document.getElementById("score").textContent = "0";
+            startGame();
+        }
+
         function startGame() {
 
             document.getElementById('gameStartButton').style.display = "none";
@@ -363,6 +375,7 @@
             document.addEventListener('keydown', onKeyPress);
 
             function onKeyPress(event) {
+                if (gamePaused) { return; }
                 var userLetter = event.key.toUpperCase();
                 squares.forEach(square => {
                     var squareElement = document.getElementById(square);
