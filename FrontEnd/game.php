@@ -387,6 +387,7 @@
                             userInputs[square] = true;
                             triggerAnimation(square, "tada");
                             squaresCorrect++;
+                            streak++;;
                             updateScore(100);
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.color = "green";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.filter = "opacity(0%)";
@@ -478,6 +479,7 @@
         }
 
         function userLoses() {
+    streak = 0;
     if (settings.practice) { setTimeout(resetWord, 800); return; }
     // Get a static array of heart elements
     var heartElements = Array.from(document.getElementsByClassName("ri-heart-fill"));
