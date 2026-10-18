@@ -267,7 +267,8 @@
         var streak = 0;
 
         function updateScore(points) {
-            score += points
+            var gained = points * Math.max(1, streak);
+            score += gained
             console.log(score);
             document.getElementById("score").innerHTML = score;
         }
