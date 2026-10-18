@@ -151,6 +151,18 @@
                         <td>
                             <i class="ri-history-fill" style="font-weight:900"></i>
                             <span>Play History</span>
+                            
+                    <tr>
+                        <td>
+                            <i class="ri-flask-line"></i>
+                            <span>Practice</span>
+                            <select name="practice" id="practiceState">
+                                <option value="false">Off</option>
+                                <option value="true">On</option>
+                            </select>
+                        </td>
+                    </tr>
+
                             <select name="history" id="historyState">
                                 <option value="true">Enabled</option>
                                 <option value="false">Disabled</option>
@@ -309,6 +321,7 @@
                 soundState: 'sound',
                 musicState: 'music',
                 historyState: 'history',
+                practiceState: 'practice',
             };
 
             Object.keys(settingsMapping).forEach(id => {
