@@ -437,6 +437,7 @@
 
 
         function continueAfterSummary() {
+            if (settings.practice) { window.location.href = "../Index.php"; return; }
             window.location.href = "user_Stats.php";
         }
 
@@ -486,7 +487,7 @@
         document.body.style.opacity = 0;
         userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
         console.log("User accuracy: " + userAccuracy + "%");
-        sendScore();
+        if (!settings.practice) { sendScore(); }
         fillRoundSummary();
         document.getElementById("roundSummary").style.display = "flex";
     } else {
