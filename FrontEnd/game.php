@@ -475,6 +475,7 @@
         }
 
         function userLoses() {
+    if (settings.practice) { setTimeout(resetWord, 800); return; }
     // Get a static array of heart elements
     var heartElements = Array.from(document.getElementsByClassName("ri-heart-fill"));
     var heartCount = heartElements.length;
