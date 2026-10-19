@@ -491,6 +491,7 @@
         }
 
         function userLoses() {
+    markNextLetter(0);
     wordsCorrect = 0;
     feverActive = false;
     streak = 0;
