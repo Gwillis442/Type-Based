@@ -248,6 +248,15 @@
             document.body.style.opacity = 1;
         }
 
+
+        function markNextLetter(index) {
+            for (var i = 1; i <= 5; i++) {
+                var el = document.getElementById("letter" + i);
+                if (!el) continue;
+                el.style.outline = (i === index) ? "2px solid #111" : "none";
+            }
+        }
+
         function selectWord() {
             var selected_word = wordbank[Math.floor(Math.random() * wordbank.length)];
             // check to make sure that the word does not reuse any letters.
