@@ -278,6 +278,23 @@
         var wordsCorrect = 0;
         var feverActive = false;
 
+
+        var toneContext = null;
+        function playTone(frequency, duration) {
+            if (!settings.sound) return;
+            try {
+                if (!toneContext) toneContext = new (window.AudioContext || window.webkitAudioContext)();
+                var osc = toneContext.createOscillator();
+                var gain = toneContext.createGain();
+                osc.frequency.value = frequency;
+                gain.gain.value = 0.05;
+                osc.connect(gain);
+                gain.connect(toneContext.destination);
+                osc.start();
+                osc.stop(toneContext.currentTime + duration);
+            } catch (e) {}
+        }
+
         function updateScore(points) {
             var gained = points * Math.max(1, streak) * (feverActive ? 2 : 1);
             score += gained
