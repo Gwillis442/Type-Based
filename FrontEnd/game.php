@@ -266,6 +266,7 @@
         var score = 0;
         var streak = 0;
         var wordsCorrect = 0;
+        var feverActive = false;
 
         function updateScore(points) {
             var gained = points * Math.max(1, streak);
@@ -516,6 +517,8 @@
     userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
 }
         function userWins() {
+            wordsCorrect++;
+            feverActive = wordsCorrect >= 3;
             setTimeout(function () {
                 document.getElementById('gameWord').style.animation = "bounce 1s 1";
                 document.getElementById('gameWord').style.color = "green";
