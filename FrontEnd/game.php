@@ -416,7 +416,8 @@
                             userInputs[square] = true;
                             triggerAnimation(square, "tada");
                             squaresCorrect++;
-                            streak++;;
+                            streak++;
+                            playTone(660, 0.08);;
                             updateScore(100);
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.color = "green";
                             document.getElementById("letter" + (squares.indexOf(square) + 1)).style.filter = "opacity(0%)";
