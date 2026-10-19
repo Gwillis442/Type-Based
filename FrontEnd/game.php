@@ -265,6 +265,7 @@
 
         var score = 0;
         var streak = 0;
+        var wordsCorrect = 0;
 
         function updateScore(points) {
             var gained = points * Math.max(1, streak);
