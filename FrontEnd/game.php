@@ -269,7 +269,7 @@
         var feverActive = false;
 
         function updateScore(points) {
-            var gained = points * Math.max(1, streak);
+            var gained = points * Math.max(1, streak) * (feverActive ? 2 : 1);
             score += gained
             console.log(score);
             document.getElementById("score").innerHTML = score;
@@ -481,6 +481,8 @@
         }
 
         function userLoses() {
+    wordsCorrect = 0;
+    feverActive = false;
     streak = 0;
     if (settings.practice) { setTimeout(resetWord, 800); return; }
     // Get a static array of heart elements
