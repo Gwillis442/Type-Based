@@ -268,6 +268,7 @@
             document.getElementById("letter3").innerHTML = selected_word[2].toUpperCase();
             document.getElementById("letter4").innerHTML = selected_word[3].toUpperCase();
             document.getElementById("letter5").innerHTML = selected_word[4].toUpperCase();
+            markNextLetter(1);
             return selected_word;
 
         }
