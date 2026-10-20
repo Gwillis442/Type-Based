@@ -509,6 +509,7 @@
         }
 
         function userLoses() {
+    playTone(180, 0.16);
     markNextLetter(0);
     wordsCorrect = 0;
     feverActive = false;
