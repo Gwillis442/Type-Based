@@ -333,8 +333,14 @@
         }
 
 
+
+        function stopMusic() {
+            var audio = document.getElementById("roundMusic");
+            if (audio) { audio.pause(); audio.remove(); }
+        }
+
         function startMusic() {
-            if (!settings.music) return;
+            if (!settings.music) { stopMusic(); return; }
             if (document.getElementById("roundMusic")) return;
             var audio = document.createElement("audio");
             audio.id = "roundMusic";
