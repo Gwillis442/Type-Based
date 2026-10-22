@@ -122,7 +122,7 @@
                             <span>Song Select</span>
                             <select name="song" id="songSelect">
                                 <option value="song1">Song 1</option>
-                                <option disabled value="song2">Song 2</option>
+                                <option value="song2">Song 2</option>
                                 <option disabled value="song3">Song 3</option>
                             </select>
                         </td>

@@ -332,7 +332,21 @@
             startGame();
         }
 
+
+        function startMusic() {
+            if (!settings.music) return;
+            if (document.getElementById("roundMusic")) return;
+            var audio = document.createElement("audio");
+            audio.id = "roundMusic";
+            audio.loop = true;
+            audio.src = "../Assets/audio/song_test.mid";
+            audio.volume = 0.4;
+            document.body.appendChild(audio);
+            audio.play().catch(function () {});
+        }
+
         function startGame() {
+            startMusic();
 
             document.getElementById('gameStartButton').style.display = "none";
 
