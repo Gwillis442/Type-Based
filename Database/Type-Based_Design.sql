@@ -42,5 +42,8 @@ CREATE TABLE typing_stats(
     accuracy_easy int,
     accuracy_medium int,
     accuracy_hard int,
+    avg_wpm_easy int,
+    avg_wpm_medium int,
+    avg_wpm_hard int,
     FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
 );
