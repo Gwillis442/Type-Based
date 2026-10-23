@@ -120,6 +120,19 @@
                         <td>
                             <i class="ri-album-fill"></i>
                             <span>Song Select</span>
+                            
+                    <tr>
+                        <td>
+                            <i class="ri-book-2-line"></i>
+                            <span>Word Pack</span>
+                            <select name="pack" id="packSelect">
+                                <option value="standard">Standard</option>
+                                <option value="music">Music</option>
+                                <option value="code">Code</option>
+                            </select>
+                        </td>
+                    </tr>
+
                             <select name="song" id="songSelect">
                                 <option value="song1">Song 1</option>
                                 <option value="song2">Song 2</option>
@@ -318,6 +331,7 @@
             const settingsMapping = {
                 modeSelect: 'mode',
                 songSelect: 'song',
+                packSelect: 'pack',
                 soundState: 'sound',
                 musicState: 'music',
                 historyState: 'history',
