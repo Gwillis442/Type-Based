@@ -39,5 +39,8 @@ CREATE TABLE typing_stats(
     high_score_easy int,
     high_score_medium int,
     high_score_hard int,
+    accuracy_easy int,
+    accuracy_medium int,
+    accuracy_hard int,
     FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
 );
