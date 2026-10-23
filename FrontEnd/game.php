@@ -262,6 +262,8 @@
             var modeName = (settings.mode || "").toLowerCase();
             if (modeName.indexOf("easy") !== -1 && typeof easyWords !== "undefined") pool = easyWords;
             if (modeName.indexOf("hard") !== -1 && typeof hardWords !== "undefined") pool = hardWords;
+            if (settings.pack === "music" && typeof musicPack !== "undefined") pool = musicPack;
+            if (settings.pack === "code" && typeof codePack !== "undefined") pool = codePack;
             var selected_word = pool[Math.floor(Math.random() * pool.length)];
             // check to make sure that the word does not reuse any letters.
             while (selected_word[0] == selected_word[1] || selected_word[0] == selected_word[2] || selected_word[0] == selected_word[3] || selected_word[0] == selected_word[4] || selected_word[1] == selected_word[2] || selected_word[1] == selected_word[3] || selected_word[1] == selected_word[4] || selected_word[2] == selected_word[3] || selected_word[2] == selected_word[4] || selected_word[3] == selected_word[4]) {
@@ -644,6 +646,7 @@
 
     </script>
     <script src="five-letter-words.js"></script>
+    <script src="word-packs.js"></script>
 </body>
 
 </html>
