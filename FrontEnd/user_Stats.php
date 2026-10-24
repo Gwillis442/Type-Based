@@ -86,6 +86,9 @@ ini_set('display_errors', 1);
     $highScoreMedium = $user_stats['HIGH_SCORE_MEDIUM'] ?? 'N/A';
     $highScoreHard = $user_stats['HIGH_SCORE_HARD'] ?? 'N/A';
     $wpm = $user_stats['WPM'] ?? 'N/A';
+    $accuracyEasy = $user_stats['ACCURACY_EASY'] ?? 'N/A';
+    $accuracyMedium = $user_stats['ACCURACY_MEDIUM'] ?? 'N/A';
+    $accuracyHard = $user_stats['ACCURACY_HARD'] ?? 'N/A';
     ?>
     <?php
     // Close the connection
