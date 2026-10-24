@@ -92,6 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     oci_bind_by_name($wpm_stmt, ':wpm', $wpm);
     oci_execute($wpm_stmt);
 
+
+    $acc_query = 'UPDATE typing_stats SET accuracy_' . $difficulty . ' = :accuracy, avg_wpm_' . $difficulty . ' = :wpm WHERE user_id = :user_id';
+    $acc_stmt = oci_parse($conn, $acc_query);
+    oci_bind_by_name($acc_stmt, ':accuracy', $wpm);
+    oci_bind_by_name($acc_stmt, ':wpm', $wpm);
+    oci_bind_by_name($acc_stmt, ':user_id', $user_id);
+    oci_execute($acc_stmt);
+
     oci_close($conn);
 }
 ?>
