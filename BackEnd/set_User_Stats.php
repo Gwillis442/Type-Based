@@ -100,6 +100,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     oci_bind_by_name($acc_stmt, ':user_id', $user_id);
     oci_execute($acc_stmt);
 
+
+    $hist_query = 'INSERT INTO game_history (user_id, mode, score, accuracy) VALUES (:user_id, :mode, :score, :accuracy)';
+    $hist_stmt = oci_parse($conn, $hist_query);
+    oci_bind_by_name($hist_stmt, ':user_id', $user_id);
+    oci_bind_by_name($hist_stmt, ':mode', $difficulty);
+    oci_bind_by_name($hist_stmt, ':score', $score);
+    oci_bind_by_name($hist_stmt, ':accuracy', $wpm);
+    oci_execute($hist_stmt);
+
     oci_close($conn);
 }
 ?>
