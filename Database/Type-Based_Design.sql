@@ -47,3 +47,10 @@ CREATE TABLE typing_stats(
     avg_wpm_hard int,
     FOREIGN KEY (user_id) REFERENCES user_profile(user_id)
 );
+CREATE TABLE game_history(
+    user_id VARCHAR2(20),
+    played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    mode VARCHAR2(10),
+    score int,
+    accuracy int
+);
