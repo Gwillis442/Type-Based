@@ -74,6 +74,8 @@ ini_set('display_errors', 1);
     $conn = hum_conn_no_login();
     $user_id = $_SESSION['user_id'];
     $username = $_SESSION['username'];
+    // Recent games are listed when Play History is enabled.
+
 
     // Get the user stats
     $user_stats = get_user_stats($conn, $user_id);
