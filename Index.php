@@ -348,6 +348,18 @@
             });
         }
 
+        
+            if (user.signedIn) {
+                var body = "mode=" + encodeURIComponent(settings.mode || "easy")
+                    + "&sound=" + (settings.sound ? "1" : "0")
+                    + "&music=" + (settings.music ? "1" : "0")
+                    + "&history=" + (settings.history ? "1" : "0");
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "BackEnd/save_User_Config.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send(body);
+            }
+
         function writeSettingsToLocalStorage(key, value) {
             const settingsObject = JSON.parse(localStorage.getItem('settingsObject')) || settings;
             settingsObject[key] = value;
