@@ -551,7 +551,7 @@
         document.body.style.opacity = 0;
         userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
         console.log("User accuracy: " + userAccuracy + "%");
-        if (!settings.practice) { sendScore(); }
+        if (!settings.practice && localStorage.getItem('userObject')) { sendScore(); }
         fillRoundSummary();
         document.getElementById("roundSummary").style.display = "flex";
     } else {
