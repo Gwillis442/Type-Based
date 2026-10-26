@@ -285,3 +285,9 @@ td select {
     border-radius: 100vmin;
 }
 #roundControls button { margin-left: 8px; }
+
+@media (max-width: 700px) {
+    #menuLogo { font-size: 72px; }
+    .w3-container.w3-half { width: 100%; }
+    .titleBar { font-size: 16px; }
+}

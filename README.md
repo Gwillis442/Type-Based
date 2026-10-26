@@ -4,7 +4,7 @@
 
 A browser typing game with falling letters, difficulty modes, accounts, and player statistics.
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Stack:** PHP, JavaScript, CSS, Oracle
 
 ## Running the project
@@ -26,6 +26,10 @@ The site is public. No student login is required to open it. Accounts and stats 
 - `CSS/` — layout and control styles
 - `Assets/` — images and audio used by the game
 
+## Future updates for version 3.0
+- `Security` — Improve potential Security flaws related to the game.
+- `Server` — Have the potential to move the server locally or off the campus servers.
+- `Dictionary` — Source 5-letter dictionary words from American-English
 ## Team
 Type-Based
 
