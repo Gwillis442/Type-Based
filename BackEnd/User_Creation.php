@@ -8,7 +8,7 @@
  */
 session_start();
 require_once("hum_conn_no_login.php");
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 function create_User($conn, $username, $password, $email, $first_name, $last_name)
 {
