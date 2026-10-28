@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_id = $_SESSION['user_id'];
     $score = filter_input(INPUT_POST, 'score', FILTER_VALIDATE_INT);
     $wpm = filter_input(INPUT_POST, 'wpm', FILTER_VALIDATE_INT);
+    $accuracy = filter_input(INPUT_POST, 'accuracy', FILTER_VALIDATE_INT);
     $difficulty = strtolower(trim($_POST['difficulty'] ?? ''));
 
     // Normalize possible values
@@ -71,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if ($wpm === false || $wpm === null) {
         $wpm = 0;
+    }
+    if ($accuracy === false || $accuracy === null) {
+        $accuracy = 0;
     }
 
     if (check_high_score($conn, $user_id, $score, $difficulty)) {
@@ -95,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $acc_query = 'UPDATE typing_stats SET accuracy_' . $difficulty . ' = :accuracy, avg_wpm_' . $difficulty . ' = :wpm WHERE user_id = :user_id';
     $acc_stmt = oci_parse($conn, $acc_query);
-    oci_bind_by_name($acc_stmt, ':accuracy', $wpm);
+    oci_bind_by_name($acc_stmt, ':accuracy', $accuracy);
     oci_bind_by_name($acc_stmt, ':wpm', $wpm);
     oci_bind_by_name($acc_stmt, ':user_id', $user_id);
     oci_execute($acc_stmt);
@@ -106,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     oci_bind_by_name($hist_stmt, ':user_id', $user_id);
     oci_bind_by_name($hist_stmt, ':mode', $difficulty);
     oci_bind_by_name($hist_stmt, ':score', $score);
-    oci_bind_by_name($hist_stmt, ':accuracy', $wpm);
+    oci_bind_by_name($hist_stmt, ':accuracy', $accuracy);
     oci_execute($hist_stmt);
 
     oci_close($conn);
