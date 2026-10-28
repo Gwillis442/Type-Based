@@ -267,7 +267,7 @@
             var selected_word = pool[Math.floor(Math.random() * pool.length)];
             // check to make sure that the word does not reuse any letters.
             while (selected_word[0] == selected_word[1] || selected_word[0] == selected_word[2] || selected_word[0] == selected_word[3] || selected_word[0] == selected_word[4] || selected_word[1] == selected_word[2] || selected_word[1] == selected_word[3] || selected_word[1] == selected_word[4] || selected_word[2] == selected_word[3] || selected_word[2] == selected_word[4] || selected_word[3] == selected_word[4]) {
-                selected_word = wordbank[Math.floor(Math.random() * wordbank.length)];
+                selected_word = pool[Math.floor(Math.random() * pool.length)];
             }
             document.getElementById("letter1").innerHTML = selected_word[0].toUpperCase();
             document.getElementById("letter2").innerHTML = selected_word[1].toUpperCase();
