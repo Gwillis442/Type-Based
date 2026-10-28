@@ -33,13 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn = hum_conn_no_login();
 
     // Prefer the logged-in session user; fall back only if explicitly supplied
-    $user_id = $_SESSION['user_id'] ?? filter_input(INPUT_POST, 'user_id', FILTER_SANITIZE_STRING);
-
-    if (empty($user_id)) {
+    if (empty($_SESSION['user_id'])) {
+        http_response_code(401);
         header('Content-Type: application/json');
-        echo json_encode(['error' => 'No user identified.']);
+        echo json_encode(['error' => 'Sign in required.']);
         exit;
     }
+    $user_id = $_SESSION['user_id'];
 
     $user_stats = get_user_stats($conn, $user_id);
 
