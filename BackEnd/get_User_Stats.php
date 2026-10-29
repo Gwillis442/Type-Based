@@ -32,7 +32,6 @@ function get_user_stats($conn, $user_id)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn = hum_conn_no_login();
 
-    // Prefer the logged-in session user; fall back only if explicitly supplied
     if (empty($_SESSION['user_id'])) {
         http_response_code(401);
         header('Content-Type: application/json');

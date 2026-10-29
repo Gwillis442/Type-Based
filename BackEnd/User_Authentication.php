@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $row = oci_fetch_assoc($stmt);
 
         if ($row) {
+            session_regenerate_id(true);
             $_SESSION['user_id'] = $row['USER_ID'];
             $_SESSION['username'] = $username;
             header("Location: ../Index.php");
