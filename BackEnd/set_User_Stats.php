@@ -76,6 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($accuracy === false || $accuracy === null) {
         $accuracy = 0;
     }
+    if ($score < 0) $score = 0;
+    if ($score > 100000) $score = 100000;
+    if ($wpm < 0) $wpm = 0;
+    if ($wpm > 300) $wpm = 300;
+    if ($accuracy < 0) $accuracy = 0;
+    if ($accuracy > 100) $accuracy = 100;
 
     if (check_high_score($conn, $user_id, $score, $difficulty)) {
         $update_query = 'UPDATE typing_stats SET high_score_' . $difficulty . ' = :score WHERE user_id = :user_id';
