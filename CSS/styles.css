@@ -33,10 +33,14 @@ button {
 }
 
 #menuLogo {
-    font-size: 150px;
     margin: 10px;
     margin-top: 50px;
-    font-family: 'Lexend Deca', sans-serif;
+    line-height: 0;
+}
+#menuLogo img {
+    height: 150px;
+    width: auto;
+    max-width: 100%;
 }
 
 .button-container {
@@ -287,12 +291,7 @@ td select {
 #roundControls button { margin-left: 8px; }
 
 @media (max-width: 700px) {
-    #menuLogo { font-size: 72px; }
+    #menuLogo img { height: 72px; }
     .w3-container.w3-half { width: 100%; }
     .titleBar { font-size: 16px; }
-}
-
-#menuLogo img {
-    height: 120px;
-    width: auto;
 }
