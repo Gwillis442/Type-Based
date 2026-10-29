@@ -29,6 +29,14 @@ function user_Authentication($conn, $username, $password)
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $now = time();
+    $locked_until = $_SESSION['login_locked_until'] ?? 0;
+    if ($locked_until > $now) {
+        $_SESSION['login_failed'] = true;
+        header("Location: ../Index.php");
+        exit();
+    }
+
     $conn = hum_conn_no_login();
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
@@ -42,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($row) {
             session_regenerate_id(true);
+            $_SESSION['login_attempts'] = 0;
+            unset($_SESSION['login_locked_until']);
             $_SESSION['user_id'] = $row['USER_ID'];
             $_SESSION['username'] = $username;
             header("Location: ../Index.php");
@@ -50,6 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $_SESSION['login_failed'] = true;
+    $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
+    if ($_SESSION['login_attempts'] >= 5) {
+        $_SESSION['login_locked_until'] = time() + 60;
+        $_SESSION['login_attempts'] = 0;
+    }
     header("Location: ../Index.php");
     exit();
 }
