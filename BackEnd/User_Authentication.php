@@ -8,6 +8,7 @@
  */
 session_start();
 require_once("hum_conn_no_login.php");
+require_once("csrf.php");
 ini_set('display_errors', 0);
 
 function user_Authentication($conn, $username, $password)
@@ -29,6 +30,11 @@ function user_Authentication($conn, $username, $password)
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (!csrf_check()) {
+        http_response_code(403);
+        exit;
+    }
+
     $now = time();
     $locked_until = $_SESSION['login_locked_until'] ?? 0;
     if ($locked_until > $now) {

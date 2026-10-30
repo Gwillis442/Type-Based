@@ -1,4 +1,8 @@
 <?php
+session_start();
+require_once('BackEnd/csrf.php');
+?>
+<?php
 /*
  * by: Chan Rain, Garrett Willis, Kevin Tieu
  * Type-Based
@@ -199,6 +203,7 @@
             <div class="w3-container button-container">
                 <form id="signInForm" method="post" action="BackEnd/User_Authentication.php" onsubmit="signIn(event)"
                     class="w3-container w3-card-4 w3-margin">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token()); ?>">
                     <h2 class="w3-left w3-margin-top">Log In</h2>
                     <i class="ri-close-line modalCloseButton" onclick="closeSignInModal()"></i>
 
@@ -245,6 +250,7 @@
         <div class="w3-container button-container">
                 <form id="createAccountForm" method="post" action="BackEnd/User_Creation.php"
                     onsubmit="createAccount(event)" class="w3-container w3-card-4 w3-margin">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(csrf_token()); ?>">
                     <h2 class="w3-left w3-margin-top">Create Account</h2>
                     <i class="ri-close-line modalCloseButton" onclick="closeCreateAccountModal()"></i>
 
