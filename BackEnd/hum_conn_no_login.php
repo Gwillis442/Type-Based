@@ -26,6 +26,13 @@
 
     function hum_conn_no_login()
     {
+        // nrs-projects sets CONTEXT_PREFIX. A local PHP server does not.
+        if (empty($_SERVER["CONTEXT_PREFIX"])) {
+            require_once(__DIR__ . "/local_conn.php");
+            require_once(__DIR__ . "/sqlite_oci.php");
+            return local_conn();
+        }
+
         // get part of the username from where this is installed
 
         $os_username = substr($_SERVER["CONTEXT_PREFIX"], 2);
