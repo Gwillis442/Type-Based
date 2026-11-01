@@ -1,0 +1,7 @@
+American five-letter list
+Source: SCOWL (Spell Checker Oriented Word Lists), size 60, American
+Kevin Atkinson, http://wordlist.aspell.net
+
+The collective work is Copyright 2000-2018 by Kevin Atkinson.
+Permission to use, copy, modify, and distribute these word lists
+for any purpose is granted without fee, provided this notice is kept.
