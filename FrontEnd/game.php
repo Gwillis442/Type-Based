@@ -258,7 +258,7 @@
         }
 
         function selectWord() {
-            var pool = wordbank;
+            var pool = (typeof englishFive !== "undefined") ? englishFive : wordbank;
             var modeName = (settings.mode || "").toLowerCase();
             if (modeName.indexOf("easy") !== -1 && typeof easyWords !== "undefined") pool = easyWords;
             if (modeName.indexOf("hard") !== -1 && typeof hardWords !== "undefined") pool = hardWords;
@@ -646,6 +646,7 @@
 
     </script>
     <script src="five-letter-words.js"></script>
+    <script src="english-five.js"></script>
     <script src="word-packs.js"></script>
 </body>
 
