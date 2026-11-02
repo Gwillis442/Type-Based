@@ -1,0 +1,33 @@
+Type-Based song list
+
+Put MP3 or OGG files in the matching folder. The game reads the folder.
+Add a file and it is included the next time a round starts.
+
+Assets/audio/easy/
+Assets/audio/medium/
+Assets/audio/hard/
+
+All tracks by Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 4.0
+http://creativecommons.org/licenses/by/4.0/
+
+Easy
+- Ancient Rite
+- Bossa Antigua
+- Disquiet
+- Local Forecast
+- Carefree
+
+Medium
+- Bit Quest
+- Blippy Trance
+- Chill Wave
+- Cipher
+- Sneaky Snitch
+
+Hard
+- Bit Shift
+- Cartoon Battle
+- Cyborg Ninja
+- Fun in a Bottle
+- Neon Laser Horizon

@@ -136,9 +136,9 @@ require_once("./BackEnd/hum_conn_no_login.php");
                     </tr>
 
                             <select name="song" id="songSelect">
-                                <option value="song1">Song 1</option>
-                                <option value="song2">Song 2</option>
-                                <option disabled value="song3">Song 3</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
                             </select>
                         </td>
                     </tr>
@@ -310,7 +310,7 @@ require_once("./BackEnd/hum_conn_no_login.php");
     <script>
         const settings = {
             mode: 'easy',
-            song: 'song1',
+            song: 'easy',
             sound: true,
             music: true,
             history: true,

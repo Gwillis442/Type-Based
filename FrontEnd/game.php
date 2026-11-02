@@ -84,7 +84,7 @@
 
 
 
-    <div id="roundControls" style="position:fixed; top:12px; right:12px; z-index:15;">
+    <div id="roundControls" style="position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:15;">
         <button id="pauseButton" onclick="togglePause()">Pause</button>
         <button id="restartButton" onclick="restartRound()">Restart</button>
     </div>
@@ -216,12 +216,12 @@
 
                 if (settings.song == undefined) {
                     settings.song = "Song Select";
-                } else if (settings.song == "song1") {
-                    settings.song = "Song 1";
-                } else if (settings.song == "song2") {
-                    settings.song = "Song 2";
-                } else if (settings.song == "song3") {
-                    settings.song = "Song 3";
+                } else if (settings.song == "easy") {
+                    settings.song = "Easy";
+                } else if (settings.song == "medium") {
+                    settings.song = "Medium";
+                } else if (settings.song == "hard") {
+                    settings.song = "Hard";
                 }
 
                 document.getElementById("selectedMode").innerHTML = settings.mode;
@@ -404,16 +404,46 @@
          * Starts the round audio when music is on.
          * return nothing
          */
+        var currentSongList = [];
+        var songIndex = 0;
+
+        function songModeName() {
+            var song = (settings.song || "easy").toLowerCase();
+            if (song.indexOf("hard") !== -1) return "hard";
+            if (song.indexOf("med") !== -1) return "medium";
+            return "easy";
+        }
+
+        function playSongAt(index) {
+            if (!currentSongList.length) return;
+            songIndex = ((index % currentSongList.length) + currentSongList.length) % currentSongList.length;
+            var audio = document.getElementById("roundMusic");
+            if (!audio) {
+                audio = document.createElement("audio");
+                audio.id = "roundMusic";
+                audio.volume = 0.4;
+                audio.addEventListener("ended", function () {
+                    playSongAt(songIndex + 1);
+                });
+                document.body.appendChild(audio);
+            }
+            audio.src = "../Assets/audio/" + songModeName() + "/" + currentSongList[songIndex];
+            audio.play().catch(function () {});
+        }
+
         function startMusic() {
             if (!settings.music) { stopMusic(); return; }
             if (document.getElementById("roundMusic")) return;
-            var audio = document.createElement("audio");
-            audio.id = "roundMusic";
-            audio.loop = true;
-            audio.src = "../Assets/audio/song_test.mid";
-            audio.volume = 0.4;
-            document.body.appendChild(audio);
-            audio.play().catch(function () {});
+            var mode = songModeName();
+            var request = new XMLHttpRequest();
+            request.open("GET", "../BackEnd/list_songs.php?mode=" + mode, true);
+            request.onreadystatechange = function () {
+                if (request.readyState !== 4 || request.status !== 200) return;
+                currentSongList = JSON.parse(request.responseText || "[]");
+                songIndex = 0;
+                playSongAt(0);
+            };
+            request.send();
         }
 
         function startGame() {
@@ -440,18 +470,16 @@
             setupZoneObserver(squares, activeSquares);
             setupGlobalInputListener(squares, activeSquares, userInputs);
 
+            var nextLetter = 0;
             roundTimer = setInterval(function () {
             if (gamePaused) { return; }
-            if (sentSquares.size < squares.length) {
-                var availableSquares = squares.filter(square => !sentSquares.has(square));
-                if (availableSquares.length > 0) {
-                var randomIndex = Math.floor(Math.random() * availableSquares.length);
-                var selectedSquare = availableSquares[randomIndex];
+            if (nextLetter < squares.length) {
+                var selectedSquare = squares[nextLetter];
+                nextLetter++;
                 sendSquare(selectedSquare);
                 squaresSent++;
                 sentSquares.add(selectedSquare);
                 activeSquares.add(selectedSquare);
-                }
             } else {
                 clearInterval(interval);
             }
