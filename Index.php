@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once('BackEnd/csrf.php');
 ?>
 <?php
@@ -10,8 +9,7 @@ require_once('BackEnd/csrf.php');
  * Index.php
  * Main menu: mode and song selection, sign-in, and account creation.
  */
-    session_start();
-    require_once("./BackEnd/hum_conn_no_login.php");
+require_once("./BackEnd/hum_conn_no_login.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,7 +80,7 @@ require_once('BackEnd/csrf.php');
 <body>
 
     <div class="w3-container w3-half">
-        <h1 id="menuLogo"><img src="Assets/images/type-based-logo.jpg" alt="Type-Based"></h1>
+        <h1 id="menuLogo"><img src="Assets/images/type-based-logo.png" alt="Type-Based"></h1>
         <div class="w3-container button-container">
 
             <button id="menuPlayButton" onclick="startGame()">
