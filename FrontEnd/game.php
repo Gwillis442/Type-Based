@@ -249,6 +249,11 @@
         }
 
 
+        /*
+         * Outlines the letter the player should type next.
+         * index - the letter position, 1 through 5
+         * return nothing
+         */
         function markNextLetter(index) {
             for (var i = 1; i <= 5; i++) {
                 var el = document.getElementById("letter" + i);
@@ -257,6 +262,11 @@
             }
         }
 
+        /*
+         * Picks a five-letter word from the current list and shows it.
+         * Standard rounds use the American list; packs and modes override it.
+         * return the selected word
+         */
         function selectWord() {
             var pool = (typeof englishFive !== "undefined") ? englishFive : wordbank;
             var modeName = (settings.mode || "").toLowerCase();
@@ -264,11 +274,16 @@
             if (modeName.indexOf("hard") !== -1 && typeof hardWords !== "undefined") pool = hardWords;
             if (settings.pack === "music" && typeof musicPack !== "undefined") pool = musicPack;
             if (settings.pack === "code" && typeof codePack !== "undefined") pool = codePack;
+            if (typeof recentWords === "undefined") recentWords = [];
             var selected_word = pool[Math.floor(Math.random() * pool.length)];
-            // check to make sure that the word does not reuse any letters.
-            while (selected_word[0] == selected_word[1] || selected_word[0] == selected_word[2] || selected_word[0] == selected_word[3] || selected_word[0] == selected_word[4] || selected_word[1] == selected_word[2] || selected_word[1] == selected_word[3] || selected_word[1] == selected_word[4] || selected_word[2] == selected_word[3] || selected_word[2] == selected_word[4] || selected_word[3] == selected_word[4]) {
+            var tries = 0;
+            // Skip repeated letters, and skip a word that was just used.
+            while ((selected_word[0] == selected_word[1] || selected_word[0] == selected_word[2] || selected_word[0] == selected_word[3] || selected_word[0] == selected_word[4] || selected_word[1] == selected_word[2] || selected_word[1] == selected_word[3] || selected_word[1] == selected_word[4] || selected_word[2] == selected_word[3] || selected_word[2] == selected_word[4] || selected_word[3] == selected_word[4] || recentWords.indexOf(selected_word) !== -1) && tries < 40) {
                 selected_word = pool[Math.floor(Math.random() * pool.length)];
+                tries++;
             }
+            recentWords.push(selected_word);
+            if (recentWords.length > 12) recentWords.shift();
             document.getElementById("letter1").innerHTML = selected_word[0].toUpperCase();
             document.getElementById("letter2").innerHTML = selected_word[1].toUpperCase();
             document.getElementById("letter3").innerHTML = selected_word[2].toUpperCase();
@@ -286,6 +301,12 @@
 
 
         var toneContext = null;
+        /*
+         * Plays a short tone when sound is on.
+         * frequency - the tone in hertz
+         * duration - how long the tone lasts, in seconds
+         * return nothing
+         */
         function playTone(frequency, duration) {
             if (!settings.sound) return;
             try {
@@ -318,29 +339,71 @@
 
         var gamePaused = false;
         var roundTimer = null;
+        /*
+         * Pauses or resumes the falling letters.
+         * return nothing
+         */
         function togglePause() {
             gamePaused = !gamePaused;
             document.getElementById("pauseButton").textContent = gamePaused ? "Resume" : "Pause";
+            var ids = ["square1", "square2", "square3", "square4", "square5"];
+            ids.forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                if (gamePaused) {
+                    var currentLeft = window.getComputedStyle(el).left;
+                    el.style.transition = "none";
+                    el.style.left = currentLeft;
+                } else if (el.style.left && el.style.left !== "100%") {
+                    el.style.transition = squareTransitionProperty;
+                    el.style.left = "-10%";
+                }
+            });
         }
 
 
+        /*
+         * Clears the round timer and score, then starts a new round.
+         * return nothing
+         */
         function restartRound() {
             if (roundTimer) { clearInterval(roundTimer); roundTimer = null; }
             gamePaused = false;
+            var pauseButton = document.getElementById("pauseButton");
+            if (pauseButton) pauseButton.textContent = "Pause";
             score = 0;
+            streak = 0;
+            wordsCorrect = 0;
+            feverActive = false;
             squaresSent = 0;
             squaresCorrect = 0;
+            userInputs = {};
             document.getElementById("score").textContent = "0";
+            ["square1", "square2", "square3", "square4", "square5"].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                el.style.transition = "none";
+                el.style.left = "100%";
+                el.style.opacity = "1";
+            });
             startGame();
         }
 
 
 
+        /*
+         * Stops and removes the round audio element.
+         * return nothing
+         */
         function stopMusic() {
             var audio = document.getElementById("roundMusic");
             if (audio) { audio.pause(); audio.remove(); }
         }
 
+        /*
+         * Starts the round audio when music is on.
+         * return nothing
+         */
         function startMusic() {
             if (!settings.music) { stopMusic(); return; }
             if (document.getElementById("roundMusic")) return;
@@ -427,11 +490,10 @@
         }
 
 
+        var onKeyPress = null;
         function setupGlobalInputListener(squares, activeSquares, userInputs) {
-            document.removeEventListener('keydown', onKeyPress);
-            document.addEventListener('keydown', onKeyPress);
-
-            function onKeyPress(event) {
+            if (onKeyPress) document.removeEventListener('keydown', onKeyPress);
+            onKeyPress = function (event) {
                 if (gamePaused) { return; }
                 var userLetter = event.key.toUpperCase();
                 squares.forEach(square => {
@@ -458,7 +520,8 @@
                         }
                     }
                 });
-            }
+            };
+            document.addEventListener('keydown', onKeyPress);
         }
         document.removeEventListener('transitionend', checkForWin);
         document.addEventListener('transitionend', checkForWin);
@@ -495,6 +558,10 @@
         }
 
 
+        /*
+         * Hides the summary panel and starts the next word.
+         * return nothing
+         */
         function continueAfterSummary() {
             if (settings.practice) { window.location.href = "../Index.php"; return; }
             window.location.href = "user_Stats.php";
