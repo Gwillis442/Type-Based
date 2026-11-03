@@ -14,13 +14,6 @@ require_once("./BackEnd/hum_conn_no_login.php");
 <!DOCTYPE html>
 <html>
 
-    <!--
-    by: Chan Rain, Garrett Willis, Kevin Tieu
-    last modified: 11/13/2024, 9:30 AM PST 
-
-    you can run this using the URL:
-    https://nrs-projects.humboldt.edu/~gdw48/Type-Based/Index.html
--->
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">

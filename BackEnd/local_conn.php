@@ -4,7 +4,7 @@
  * Type-Based
  *
  * local_conn.php
- * Opens the SQLite file used when the project is not on nrs-projects.
+ * Opens the SQLite file used for a local run.
  */
 /*
  * Opens the local SQLite file and creates the tables.

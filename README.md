@@ -5,15 +5,10 @@
 A browser typing game with falling letters, difficulty modes, accounts, and player statistics.
 
 **Version:** 2.0  
-**Stack:** PHP, JavaScript, CSS, Oracle
+**Stack:** PHP, JavaScript, CSS, SQLite
 
 ## Running the project
-Live site: https://nrs-projects.humboldt.edu/~crm183/Type-Based/Index.php
-
-The site is public. No student login is required to open it. Accounts and stats use the game’s own sign-in.
-
-### Local
-PHP is required. On a Mac or Linux, also install the SQLite extension.
+PHP is required. On a Mac or Linux, also install the SQLite extension. Accounts and stats use the game’s own sign-in.
 
 Windows:
 
@@ -36,7 +31,7 @@ php -S localhost:8000
 
 Then open http://localhost:8000/Index.php
 
-On nrs-projects the pages use the Humboldt Oracle connection. A local run uses the SQLite file in `data/`.
+A local run uses the SQLite file in `data/`.
 
 ## Screenshots
 Menu
@@ -55,7 +50,8 @@ Stats
 - `Index.php` — main menu: mode and song selection, sign-in, and account creation
 - `FrontEnd/` — the game page, the stats page, and the word lists
 - `BackEnd/` — login, account creation, and saving or loading player stats
-- `Database/` — the Oracle table design and sample data
+- `Database/` — the local SQLite schema
+- `nrs-projects/` — old campus Oracle files, not used locally
 - `CSS/` — layout and control styles
 - `Assets/` — images and audio used by the game
 

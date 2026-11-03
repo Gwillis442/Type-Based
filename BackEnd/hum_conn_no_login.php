@@ -25,12 +25,12 @@
     -----*/
 
     /*
-     * Opens the database: SQLite locally, Oracle on nrs-projects.
+     * Opens the local SQLite database. Uses Oracle only if a campus context is set.
      * return the connection
      */
     function hum_conn_no_login()
     {
-        // nrs-projects sets CONTEXT_PREFIX. A local PHP server does not.
+        // A campus host may set CONTEXT_PREFIX. A local PHP server does not.
         if (empty($_SERVER["CONTEXT_PREFIX"])) {
             require_once(__DIR__ . "/local_conn.php");
             require_once(__DIR__ . "/sqlite_oci.php");
