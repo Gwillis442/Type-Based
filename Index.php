@@ -122,7 +122,11 @@ require_once("./BackEnd/hum_conn_no_login.php");
                         <td>
                             <i class="ri-album-fill"></i>
                             <span>Song Select</span>
-                            
+                            <select name="song" id="songSelect">
+                                <option value="all">All songs</option>
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <i class="ri-book-2-line"></i>
@@ -131,14 +135,6 @@ require_once("./BackEnd/hum_conn_no_login.php");
                                 <option value="standard">Standard</option>
                                 <option value="music">Music</option>
                                 <option value="code">Code</option>
-                            </select>
-                        </td>
-                    </tr>
-
-                            <select name="song" id="songSelect">
-                                <option value="easy">Easy</option>
-                                <option value="medium">Medium</option>
-                                <option value="hard">Hard</option>
                             </select>
                         </td>
                     </tr>
@@ -166,7 +162,12 @@ require_once("./BackEnd/hum_conn_no_login.php");
                         <td>
                             <i class="ri-history-fill" style="font-weight:900"></i>
                             <span>Play History</span>
-                            
+                            <select name="history" id="historyState">
+                                <option value="true">Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <i class="ri-flask-line"></i>
@@ -174,13 +175,6 @@ require_once("./BackEnd/hum_conn_no_login.php");
                             <select name="practice" id="practiceState">
                                 <option value="false">Off</option>
                                 <option value="true">On</option>
-                            </select>
-                        </td>
-                    </tr>
-
-                            <select name="history" id="historyState">
-                                <option value="true">Enabled</option>
-                                <option value="false">Disabled</option>
                             </select>
                             <br>
                             <div class="w3-blurb">
@@ -310,7 +304,7 @@ require_once("./BackEnd/hum_conn_no_login.php");
     <script>
         const settings = {
             mode: 'easy',
-            song: 'easy',
+            song: 'all',
             sound: true,
             music: true,
             history: true,
@@ -326,11 +320,47 @@ require_once("./BackEnd/hum_conn_no_login.php");
             password: 'password',
         };
 
+        /*
+         * Saves setting changes and loads the song list.
+         * return nothing
+         */
         function initSettingsListener() {
 
             if (localStorage.getItem('settingsObject') === null) {
                 localStorage.setItem('settingsObject', JSON.stringify(settings));
             }
+
+
+            /*
+             * Author: Kevin Tieu
+             * Fills Song Select from the folder for the selected mode.
+             * return nothing
+             */
+            function loadSongChoices() {
+                var mode = document.getElementById("modeSelect").value || "easy";
+                if (mode === "med") mode = "medium";
+                var songSelect = document.getElementById("songSelect");
+                var current = songSelect.value;
+                var request = new XMLHttpRequest();
+                request.open("GET", "BackEnd/list_songs.php?mode=" + mode, true);
+                request.onreadystatechange = function () {
+                    if (request.readyState !== 4 || request.status !== 200) return;
+                    var songs = JSON.parse(request.responseText || "[]");
+                    songSelect.innerHTML = '<option value="all">All songs</option>';
+                    songs.forEach(function (name) {
+                        var option = document.createElement("option");
+                        option.value = name;
+                        option.textContent = name.replace(/\.(mp3|ogg)$/i, "");
+                        songSelect.appendChild(option);
+                    });
+                    if (current && songSelect.querySelector('option[value="' + current + '"]')) {
+                        songSelect.value = current;
+                    }
+                };
+                request.send();
+            }
+            document.getElementById("modeSelect").addEventListener("change", loadSongChoices);
+            loadSongChoices();
 
             const settingsMapping = {
                 modeSelect: 'mode',
@@ -364,12 +394,22 @@ require_once("./BackEnd/hum_conn_no_login.php");
                 xhr.send(body);
             }
 
+        /*
+         * Writes one setting into the saved settings object.
+         * key - the setting name
+         * value - the setting value
+         * return nothing
+         */
         function writeSettingsToLocalStorage(key, value) {
             const settingsObject = JSON.parse(localStorage.getItem('settingsObject')) || settings;
             settingsObject[key] = value;
             localStorage.setItem('settingsObject', JSON.stringify(settingsObject));
         }
 
+        /*
+         * Restores the saved settings into the menu.
+         * return nothing
+         */
         function applySettingsFromLocalStorage() {
             const settingsObject = JSON.parse(localStorage.getItem('settingsObject'));
             if (settingsObject) {
@@ -384,6 +424,10 @@ require_once("./BackEnd/hum_conn_no_login.php");
             updateConfigButtonDisplay();
         }
 
+        /*
+         * Shows or hides the history button from the saved setting.
+         * return nothing
+         */
         function updateConfigButtonDisplay() {
             console.log(settings.history, user.signedIn);
             console.log(document.getElementById('menuConfigButton'));
@@ -406,10 +450,18 @@ require_once("./BackEnd/hum_conn_no_login.php");
         }
 
 
+        /*
+         * Writes the current settings object to local storage.
+         * return nothing
+         */
         function applySettingsToLocalStorage() {
             Object.keys(settings).forEach(key => writeSettingsToLocalStorage(key, settings[key]));
         }
 
+        /*
+         * Reads the saved sign-in and shows the username.
+         * return nothing
+         */
         function initSignInState() {
             const userObject = JSON.parse(localStorage.getItem('userObject'));
             if (userObject) {
@@ -419,6 +471,10 @@ require_once("./BackEnd/hum_conn_no_login.php");
             updateSignInDisplay();
         }
 
+        /*
+         * Shows the signed-in username on the menu.
+         * return nothing
+         */
         function updateSignInDisplay() {
             document.getElementById('menuSignInButton').innerHTML = user.signedIn
                 ? '<i class="ri-logout-box-line"></i><span style="font-size:20px;vertical-align: text-top;">LOG OUT</span>'
@@ -428,6 +484,10 @@ require_once("./BackEnd/hum_conn_no_login.php");
             updateTooltips();
         }
 
+        /*
+         * Opens the sign-in modal.
+         * return nothing
+         */
         function signIn() {
             if (user.signedIn) {
                 user.signedIn = false;
@@ -443,6 +503,11 @@ require_once("./BackEnd/hum_conn_no_login.php");
             updateSignInDisplay();
         }
 
+        /*
+         * Submits the sign-in form.
+         * event - the form submit event
+         * return nothing
+         */
         function modalSignIn(event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
@@ -457,6 +522,11 @@ require_once("./BackEnd/hum_conn_no_login.php");
             }
         }
 
+        /*
+         * Submits the account creation form.
+         * event - the form submit event
+         * return nothing
+         */
         function modalCreateAccount(event) {
             event.preventDefault();
             const username = document.getElementById('createAccountUsername').value;
@@ -470,6 +540,10 @@ require_once("./BackEnd/hum_conn_no_login.php");
             }
         }
 
+        /*
+         * Opens the account creation modal.
+         * return nothing
+         */
         function displayCreateAccountModal() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -488,6 +562,10 @@ require_once("./BackEnd/hum_conn_no_login.php");
             document.getElementById('signInModalContainer').style.transform = 'scale(1)';
         }
 
+        /*
+         * Closes the account creation modal.
+         * return nothing
+         */
         function closeCreateAccountModal() {
             const modal = document.getElementById('createAccountModalContainer');
             modal.style.opacity = '0%';
@@ -495,6 +573,10 @@ require_once("./BackEnd/hum_conn_no_login.php");
             modal.style.transform = 'scale(1)';
         }
 
+        /*
+         * Closes the sign-in modal.
+         * return nothing
+         */
         function closeSignInModal() {
             const modal = document.getElementById('signInModalContainer');
             modal.style.opacity = '0%';
@@ -502,15 +584,27 @@ require_once("./BackEnd/hum_conn_no_login.php");
             modal.style.transform = 'scale(1)';
         }
 
+        /*
+         * Starts a round: picks a word and sends the letters in order.
+         * return nothing
+         */
         function startGame() {
             applySettingsToLocalStorage();
             setTimeout(() => window.location.href = 'FrontEnd/game.php', 1);
         }
 
+        /*
+         * Opens the stats page from the menu.
+         * return nothing
+         */
         function viewData() {
             setTimeout(() => window.location.href = 'FrontEnd/user_Stats.php', 1);
         }
 
+        /*
+         * Refreshes the help tooltips on the menu.
+         * return nothing
+         */
         function updateTooltips() {
             destroyTooltip('#menuSignInButton');
             const signInTooltipContent = user.signedIn
@@ -521,6 +615,12 @@ require_once("./BackEnd/hum_conn_no_login.php");
             createTooltip('#menuConfigButton', 'View past game data.');
         }
 
+        /*
+         * Adds one help tooltip.
+         * selector - the element to attach to
+         * content - the help text
+         * return nothing
+         */
         function createTooltip(selector, content) {
             tippy(selector, {
                 content,
@@ -530,6 +630,11 @@ require_once("./BackEnd/hum_conn_no_login.php");
             });
         }
 
+        /*
+         * Removes one help tooltip.
+         * selector - the element to clear
+         * return nothing
+         */
         function destroyTooltip(selector) {
             const element = document.querySelector(selector);
             if (element && element._tippy) element._tippy.destroy();

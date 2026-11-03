@@ -11,6 +11,16 @@ require_once("hum_conn_no_login.php");
 require_once("csrf.php");
 ini_set('display_errors', 0);
 
+/*
+ * Creates a profile and account.
+ * conn - the database connection
+ * username - the account name
+ * password - the account password
+ * email - the email address
+ * first_name - the first name
+ * last_name - the last name
+ * return true on success
+ */
 function create_User($conn, $username, $password, $email, $first_name, $last_name)
 {
     $user_id = uniqid();

@@ -10,6 +10,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+/*
+ * Returns the session token for form posts.
+ * return the token string
+ */
 function csrf_token()
 {
     if (empty($_SESSION['csrf_token'])) {
@@ -18,6 +22,10 @@ function csrf_token()
     return $_SESSION['csrf_token'];
 }
 
+/*
+ * Rejects a post whose token does not match the session.
+ * return nothing
+ */
 function csrf_check()
 {
     $sent = $_POST['csrf_token'] ?? '';

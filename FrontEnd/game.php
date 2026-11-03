@@ -78,7 +78,9 @@
             <p>Mode: <span id="summaryMode"></span></p>
             <p>Score: <span id="summaryScore"></span></p>
             <p>Accuracy: <span id="summaryAccuracy"></span>%</p>
-            <button id="summaryContinue" onclick="continueAfterSummary()">Continue</button>
+            <button id="summaryContinue" onclick="playAgain()">Play again</button>
+            <button id="summaryMenu" onclick="backToMenu()">Main menu</button>
+            <button id="summaryStats" onclick="viewStats()">View stats</button>
         </div>
     </div>
 
@@ -87,6 +89,8 @@
     <div id="roundControls" style="position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:15;">
         <button id="pauseButton" onclick="togglePause()">Pause</button>
         <button id="restartButton" onclick="restartRound()">Restart</button>
+        <label for="volumeSlider">Vol</label>
+        <input id="volumeSlider" type="range" min="0" max="100" value="80">
     </div>
 
 <button id = "gameStartButton" onclick="startGame()">
@@ -97,8 +101,8 @@
     <div class="titleBar">
         <div class="titleHPBar">
             <i class="ri-heart-fill"></i>
-            <i class="ri-heart-line"></i>
-            <i class="ri-heart-line"></i>
+            <i class="ri-heart-fill"></i>
+            <i class="ri-heart-fill"></i>
         </div>
         <div class="flex-end">
 
@@ -190,9 +194,14 @@
 
         var squaresSent = 0;
         var squaresCorrect = 0;
+        var wrongPresses = 0;
 
         var userAccuracy = 0;
 
+        /*
+         * Shows the saved mode and song on the round screen.
+         * return nothing
+         */
         function displaySettingsObject() {
             if (localStorage.getItem("settingsObject") == null) {
             } else {
@@ -210,8 +219,8 @@
                     squareBPMProperty = 240;
                 } else if (settings.mode == "hard") {
                     settings.mode = "Hard";
-                    squareTransitionProperty = "left 1s linear";
-                    squareBPMProperty = 360;
+                    squareTransitionProperty = "left 2s linear";
+                    squareBPMProperty = 180;
                 }
 
                 if (settings.song == undefined) {
@@ -229,6 +238,10 @@
             }
         }
 
+        /*
+         * Reads the saved sign-in and shows the username.
+         * return nothing
+         */
         function initSignInState() {
             var userObject = JSON.parse(localStorage.getItem("userObject"));
             if (userObject == null || userObject.signedIn == false) {
@@ -269,9 +282,6 @@
          */
         function selectWord() {
             var pool = (typeof englishFive !== "undefined") ? englishFive : wordbank;
-            var modeName = (settings.mode || "").toLowerCase();
-            if (modeName.indexOf("easy") !== -1 && typeof easyWords !== "undefined") pool = easyWords;
-            if (modeName.indexOf("hard") !== -1 && typeof hardWords !== "undefined") pool = hardWords;
             if (settings.pack === "music" && typeof musicPack !== "undefined") pool = musicPack;
             if (settings.pack === "code" && typeof codePack !== "undefined") pool = codePack;
             if (typeof recentWords === "undefined") recentWords = [];
@@ -289,12 +299,15 @@
             document.getElementById("letter3").innerHTML = selected_word[2].toUpperCase();
             document.getElementById("letter4").innerHTML = selected_word[3].toUpperCase();
             document.getElementById("letter5").innerHTML = selected_word[4].toUpperCase();
+            nextLetterIndex = 0;
             markNextLetter(1);
             return selected_word;
 
         }
 
         var score = 0;
+        var nextLetterIndex = 0;
+        var keysDown = {};
         var streak = 0;
         var wordsCorrect = 0;
         var feverActive = false;
@@ -322,6 +335,11 @@
             } catch (e) {}
         }
 
+        /*
+         * Adds points to the score and updates the score display.
+         * points - the base points for this hit
+         * return nothing
+         */
         function updateScore(points) {
             var gained = points * Math.max(1, streak) * (feverActive ? 2 : 1);
             score += gained
@@ -329,6 +347,12 @@
             document.getElementById("score").innerHTML = score;
         }
 
+        /*
+         * Plays a short animation on a falling letter.
+         * square - the letter square id
+         * animationClass - the animation name
+         * return nothing
+         */
         function triggerAnimation(square, animationClass) {
             var squareElement = document.getElementById(square);
             squareElement.style.animation = "none"; // Reset animation
@@ -340,12 +364,18 @@
         var gamePaused = false;
         var roundTimer = null;
         /*
+         * Author: Kevin Tieu
          * Pauses or resumes the falling letters.
          * return nothing
          */
         function togglePause() {
             gamePaused = !gamePaused;
             document.getElementById("pauseButton").textContent = gamePaused ? "Resume" : "Pause";
+            var audio = document.getElementById("roundMusic");
+            if (audio) {
+                if (gamePaused) audio.pause();
+                else audio.play().catch(function () {});
+            }
             var ids = ["square1", "square2", "square3", "square4", "square5"];
             ids.forEach(function (id) {
                 var el = document.getElementById(id);
@@ -363,6 +393,7 @@
 
 
         /*
+         * Author: Kevin Tieu
          * Clears the round timer and score, then starts a new round.
          * return nothing
          */
@@ -377,8 +408,13 @@
             feverActive = false;
             squaresSent = 0;
             squaresCorrect = 0;
+            wrongPresses = 0;
             userInputs = {};
             document.getElementById("score").textContent = "0";
+            document.querySelectorAll(".titleHPBar i").forEach(function (heart) {
+                heart.classList.remove("ri-heart-line");
+                heart.classList.add("ri-heart-fill");
+            });
             ["square1", "square2", "square3", "square4", "square5"].forEach(function (id) {
                 var el = document.getElementById(id);
                 if (!el) return;
@@ -406,14 +442,36 @@
          */
         var currentSongList = [];
         var songIndex = 0;
+        var musicVolume = 0.8;
 
+        /*
+         * Author: Kevin Tieu
+         * Returns easy, medium, or hard from the selected mode.
+         * return the mode folder name
+         */
         function songModeName() {
-            var song = (settings.song || "easy").toLowerCase();
-            if (song.indexOf("hard") !== -1) return "hard";
-            if (song.indexOf("med") !== -1) return "medium";
+            var mode = (settings.mode || "easy").toLowerCase();
+            if (mode.indexOf("hard") !== -1) return "hard";
+            if (mode.indexOf("med") !== -1) return "medium";
             return "easy";
         }
 
+        /*
+         * Author: Kevin Tieu
+         * Sets the playing song to the slider volume.
+         * return nothing
+         */
+        function applyVolume() {
+            var audio = document.getElementById("roundMusic");
+            if (audio) audio.volume = musicVolume;
+        }
+
+        /*
+         * Author: Kevin Tieu
+         * Plays one song from the current list and advances when it ends.
+         * index - the position in the song list
+         * return nothing
+         */
         function playSongAt(index) {
             if (!currentSongList.length) return;
             songIndex = ((index % currentSongList.length) + currentSongList.length) % currentSongList.length;
@@ -421,31 +479,65 @@
             if (!audio) {
                 audio = document.createElement("audio");
                 audio.id = "roundMusic";
-                audio.volume = 0.4;
                 audio.addEventListener("ended", function () {
                     playSongAt(songIndex + 1);
                 });
                 document.body.appendChild(audio);
             }
+            audio.volume = musicVolume;
             audio.src = "../Assets/audio/" + songModeName() + "/" + currentSongList[songIndex];
             audio.play().catch(function () {});
         }
 
+        /*
+         * Author: Kevin Tieu
+         * Loads the mode folder, shuffles it, and starts playback.
+         * return nothing
+         */
         function startMusic() {
             if (!settings.music) { stopMusic(); return; }
             if (document.getElementById("roundMusic")) return;
+            var saved = localStorage.getItem("musicVolume");
+            if (saved !== null) musicVolume = Number(saved);
+            var slider = document.getElementById("volumeSlider");
+            if (slider) slider.value = Math.round(musicVolume * 100);
             var mode = songModeName();
             var request = new XMLHttpRequest();
             request.open("GET", "../BackEnd/list_songs.php?mode=" + mode, true);
             request.onreadystatechange = function () {
                 if (request.readyState !== 4 || request.status !== 200) return;
-                currentSongList = JSON.parse(request.responseText || "[]");
+                var songs = JSON.parse(request.responseText || "[]");
+                for (var i = songs.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var swap = songs[i];
+                    songs[i] = songs[j];
+                    songs[j] = swap;
+                }
+                var picked = settings.song || "all";
+                if (picked !== "all" && songs.indexOf(picked) !== -1) {
+                    currentSongList = [picked];
+                } else {
+                    currentSongList = songs;
+                }
                 songIndex = 0;
                 playSongAt(0);
             };
             request.send();
         }
 
+        var volumeSlider = document.getElementById("volumeSlider");
+        if (volumeSlider) {
+            volumeSlider.addEventListener("input", function () {
+                musicVolume = Number(volumeSlider.value) / 100;
+                localStorage.setItem("musicVolume", String(musicVolume));
+                applyVolume();
+            });
+        }
+
+        /*
+         * Starts a round: picks a word and sends the letters in order.
+         * return nothing
+         */
         function startGame() {
             startMusic();
 
@@ -494,6 +586,12 @@
 
         let observer; // Declare globally to track the observer.
 
+        /*
+         * Watches which letters are on screen so only those can be typed.
+         * squares - the five letter square ids
+         * activeSquares - the set of letters currently on screen
+         * return nothing
+         */
         function setupZoneObserver(squares, activeSquares) {
             // Disconnect any existing observer to prevent multiple observers
             if (observer) observer.disconnect();
@@ -519,41 +617,65 @@
 
 
         var onKeyPress = null;
+        /*
+         * Author: Kevin Tieu
+         * Accepts only the next letter in the word and ignores extra keys.
+         * squares - the five letter square ids
+         * activeSquares - the set of letters currently on screen
+         * userInputs - the letters already typed
+         * return nothing
+         */
         function setupGlobalInputListener(squares, activeSquares, userInputs) {
             if (onKeyPress) document.removeEventListener('keydown', onKeyPress);
             onKeyPress = function (event) {
-                if (gamePaused) { return; }
+                if (gamePaused || event.repeat) { return; }
+                if (event.key.length !== 1) { return; }
                 var userLetter = event.key.toUpperCase();
-                squares.forEach(square => {
-                    var squareElement = document.getElementById(square);
-                    var correctLetter = document.getElementById(`${square}contents`).innerHTML;
-                    if (!userInputs[square] && activeSquares.has(square)) {
-                        if (userLetter === correctLetter) {
-                            userInputs[square] = true;
-                            triggerAnimation(square, "tada");
-                            squaresCorrect++;
-                            streak++;
-                            playTone(660, 0.08);;
-                            updateScore(100);
-                            document.getElementById("letter" + (squares.indexOf(square) + 1)).style.color = "green";
-                            document.getElementById("letter" + (squares.indexOf(square) + 1)).style.filter = "opacity(0%)";
-                            document.getElementById("letter" + (squares.indexOf(square) + 1)).style.animation = "hinge 1.5s 1";
-                            // when the animation is done, hide the letter
-                            document.getElementById("letter" + (squares.indexOf(square) + 1)).addEventListener('animationend', function hideLetter() {
-                                document.getElementById("letter" + (squares.indexOf(square) + 1)).style.visibility = "hidden";
-                                document.getElementById("letter" + (squares.indexOf(square) + 1)).removeEventListener('animationend', hideLetter);
-                                document.getElementById("letter" + (squares.indexOf(square) + 1)).style.filter = "opacity(0%)";
-                            });
-                        } else {
-                        }
-                    }
+                keysDown[userLetter] = true;
+                if (Object.keys(keysDown).length > 1) { return; }
+                if (nextLetterIndex >= squares.length) { return; }
+                var square = squares[nextLetterIndex];
+                var correctLetter = document.getElementById("letter" + (nextLetterIndex + 1)).textContent.trim().toUpperCase();
+                if (userLetter !== correctLetter) {
+                    wrongPresses++;
+                    updateAccuracy();
+                    var expected = document.getElementById("letter" + (nextLetterIndex + 1));
+                    expected.style.color = "red";
+                    setTimeout(function () { if (expected.style.color === "red") expected.style.color = "black"; }, 150);
+                    return;
+                }
+                if (!activeSquares.has(square)) { return; }
+                userInputs[square] = true;
+                nextLetterIndex++;
+                markNextLetter(nextLetterIndex + 1);
+                triggerAnimation(square, "tada");
+                squaresCorrect++;
+                streak++;
+                playTone(660, 0.08);
+                updateScore(100);
+                var letterEl = document.getElementById("letter" + nextLetterIndex);
+                letterEl.style.color = "green";
+                letterEl.style.filter = "opacity(0%)";
+                letterEl.style.animation = "hinge 1.5s 1";
+                letterEl.addEventListener('animationend', function hideLetter() {
+                    letterEl.style.visibility = "hidden";
+                    letterEl.removeEventListener('animationend', hideLetter);
                 });
             };
             document.addEventListener('keydown', onKeyPress);
+            document.addEventListener('keyup', function (event) {
+                if (event.key.length !== 1) return;
+                delete keysDown[event.key.toUpperCase()];
+            });
         }
         document.removeEventListener('transitionend', checkForWin);
         document.addEventListener('transitionend', checkForWin);
 
+        /*
+         * Checks the finished word and calls a win or a loss.
+         * event - the transition end event
+         * return nothing
+         */
         function checkForWin(event) {
             // Ensure userInputs is accessible and that the game logic correctly checks if the user won
             if (event.propertyName === "left") {
@@ -579,6 +701,10 @@
         }
 
 
+        /*
+         * Fills the end panel with mode, score, and accuracy.
+         * return nothing
+         */
         function fillRoundSummary() {
             document.getElementById("summaryMode").textContent = settings.mode || "Easy";
             document.getElementById("summaryScore").textContent = score;
@@ -587,14 +713,87 @@
 
 
         /*
+         * Author: Kevin Tieu
          * Hides the summary panel and starts the next word.
          * return nothing
          */
-        function continueAfterSummary() {
-            if (settings.practice) { window.location.href = "../Index.php"; return; }
+        function hideSummary() {
+            document.getElementById("roundSummary").style.display = "none";
+            document.body.style.opacity = "1";
+        }
+
+        /*
+         * Author: Kevin Tieu
+         * Hides the end panel and starts another round.
+         * return nothing
+         */
+        function playAgain() {
+            hideSummary();
+            restartRound();
+        }
+
+        /*
+         * Author: Kevin Tieu
+         * Leaves the round and opens the main menu.
+         * return nothing
+         */
+        function backToMenu() {
+            window.location.href = "../Index.php";
+        }
+
+        /*
+         * Author: Kevin Tieu
+         * Opens the user stats page.
+         * return nothing
+         */
+        function viewStats() {
             window.location.href = "user_Stats.php";
         }
 
+        /*
+         * Author: Kevin Tieu
+         * Starts another round from the end panel.
+         * return nothing
+         */
+        function continueAfterSummary() {
+            playAgain();
+        }
+
+
+        /*
+         * Author: Kevin Tieu
+         * Saves the guest round so the stats page can show it once.
+         * return nothing
+         */
+        function saveGuestRound() {
+            if (localStorage.getItem("userObject")) return;
+            var raw = (settings.mode || "easy").toLowerCase();
+            var difficulty = "easy";
+            if (raw.indexOf("med") !== -1) difficulty = "medium";
+            else if (raw.indexOf("hard") !== -1) difficulty = "hard";
+            localStorage.setItem("guestRound", JSON.stringify({
+                mode: difficulty,
+                score: score,
+                accuracy: userAccuracy,
+                wrongKeys: wrongPresses
+            }));
+        }
+
+
+        /*
+         * Author: Kevin Tieu
+         * Sets accuracy from correct keys and wrong keys.
+         * return nothing
+         */
+        function updateAccuracy() {
+            var attempts = squaresCorrect + wrongPresses;
+            userAccuracy = attempts === 0 ? 0 : Math.round((squaresCorrect / attempts) * 100);
+        }
+
+        /*
+         * Sends the signed-in score to the stats script.
+         * return nothing
+         */
         function sendScore(){
             // Send the score and difficulty to set_user_stats.php
             var raw = (settings.mode || "easy").toLowerCase();
@@ -614,6 +813,11 @@
             xhr.send("score=" + encodeURIComponent(score) + "&difficulty=" + encodeURIComponent(difficulty) + "&wpm=" + encodeURIComponent(userAccuracy));
         }
 
+        /*
+         * Starts one letter moving across the screen.
+         * square - the letter square id
+         * return nothing
+         */
         function sendSquare(square) {
             var squareElement = document.getElementById(square);
             squareElement.style.transition = squareTransitionProperty;
@@ -629,6 +833,10 @@
             });
         }
 
+        /*
+         * Spends one heart for a missed word and ends the round on the third miss.
+         * return nothing
+         */
         function userLoses() {
     playTone(180, 0.16);
     markNextLetter(0);
@@ -640,20 +848,23 @@
     var heartElements = Array.from(document.getElementsByClassName("ri-heart-fill"));
     var heartCount = heartElements.length;
 
-    // Check if the player has no hearts left
-    if (heartCount <= 0) {
-        document.body.style.transition = "opacity 5s";
-        document.body.style.opacity = 0;
-        userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
-        console.log("User accuracy: " + userAccuracy + "%");
-        if (!settings.practice && localStorage.getItem('userObject')) { sendScore(); }
-        fillRoundSummary();
-        document.getElementById("roundSummary").style.display = "flex";
-    } else {
-        // Replace the last heart element with a heart-line element
+    // A miss always spends one heart. Three hearts means three misses.
+    if (heartCount > 0) {
         var lastHeart = heartElements[heartCount - 1];
         lastHeart.classList.remove("ri-heart-fill");
         lastHeart.classList.add("ri-heart-line");
+        heartCount = heartCount - 1;
+    }
+
+    if (heartCount <= 0) {
+        document.body.style.opacity = "1";
+        updateAccuracy();
+        console.log("User accuracy: " + userAccuracy + "%");
+        if (!settings.practice && localStorage.getItem('userObject')) { sendScore(); }
+        saveGuestRound();
+        fillRoundSummary();
+        document.getElementById("roundSummary").style.display = "flex";
+    } else {
 
         // Trigger animation and color change for the word
         document.getElementById('gameWord').style.animation = "shakeX 1s 1";
@@ -667,8 +878,12 @@
     }
 
     // Update accuracy after the event
-    userAccuracy = Math.round((squaresCorrect / squaresSent) * 100);
+    updateAccuracy();
 }
+        /*
+         * Scores a finished word and loads the next one.
+         * return nothing
+         */
         function userWins() {
             wordsCorrect++;
             feverActive = wordsCorrect >= 3;
@@ -702,6 +917,10 @@
 
         }
 
+        /*
+         * Clears the word display and starts the next word.
+         * return nothing
+         */
         function resetWord() {
     document.getElementById('gameWord').style.animation = "flipOutX 1s 1";
     document.getElementById('gameWord').style.color = "black";

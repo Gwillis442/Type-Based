@@ -11,6 +11,13 @@ require_once("hum_conn_no_login.php");
 require_once("csrf.php");
 ini_set('display_errors', 0);
 
+/*
+ * Checks a username and password and starts the session.
+ * conn - the database connection
+ * username - the account name
+ * password - the account password
+ * return true on success
+ */
 function user_Authentication($conn, $username, $password)
 {
     $query = 'SELECT password FROM user_account WHERE username = :username';

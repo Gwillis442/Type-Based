@@ -22,6 +22,10 @@ class LocalStatement
     public $pdo;
     public $stmt;
 
+    /*
+     * Handles __construct.
+     * return nothing
+     */
     function __construct($pdo, $sql)
     {
         $this->pdo = $pdo;
@@ -29,17 +33,36 @@ class LocalStatement
     }
 }
 
+/*
+ * Prepares a statement for the local SQLite shim.
+ * conn - the SQLite connection
+ * sql - the query text
+ * return the statement
+ */
 function oci_parse($conn, $sql)
 {
     return new LocalStatement($conn, $sql);
 }
 
+/*
+ * Binds one value to a named placeholder.
+ * stmt - the statement
+ * name - the placeholder
+ * value - the bound value
+ * return true
+ */
 function oci_bind_by_name($stmt, $name, &$value)
 {
     $stmt->binds[$name] = &$value;
     return true;
 }
 
+/*
+ * Runs a prepared statement.
+ * stmt - the statement
+ * mode - unused, kept for the Oracle call shape
+ * return true on success
+ */
 function oci_execute($stmt, $mode = 0)
 {
     try {
@@ -56,6 +79,11 @@ function oci_execute($stmt, $mode = 0)
     }
 }
 
+/*
+ * Returns the next result row with uppercase keys.
+ * stmt - the statement
+ * return the row, or false
+ */
 function oci_fetch_assoc($stmt)
 {
     if (!$stmt->row) {
@@ -69,12 +97,22 @@ function oci_fetch_assoc($stmt)
     return $upper;
 }
 
+/*
+ * Returns the last statement error.
+ * stmt - the statement
+ * return the error array
+ */
 function oci_error($stmt = null)
 {
     $message = ($stmt && $stmt->error) ? $stmt->error : "database error";
     return ["message" => $message];
 }
 
+/*
+ * Closes a connection. The local shim does nothing.
+ * conn - the connection
+ * return true
+ */
 function oci_close($conn)
 {
     return true;

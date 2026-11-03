@@ -24,6 +24,10 @@
         last modified: 2024-03-28
     -----*/
 
+    /*
+     * Opens the database: SQLite locally, Oracle on nrs-projects.
+     * return the connection
+     */
     function hum_conn_no_login()
     {
         // nrs-projects sets CONTEXT_PREFIX. A local PHP server does not.

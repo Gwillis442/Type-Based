@@ -6,6 +6,10 @@
  * local_conn.php
  * Opens the SQLite file used when the project is not on nrs-projects.
  */
+/*
+ * Opens the local SQLite file and creates the tables.
+ * return the connection
+ */
 function local_conn()
 {
     $dir = __DIR__ . "/../data";

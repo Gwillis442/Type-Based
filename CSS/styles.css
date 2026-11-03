@@ -16,7 +16,7 @@ html {
 }
 
 body {
-    opacity: 0%;
+    opacity: 1;
     transition: all 0.5s;
 }
 
@@ -289,6 +289,8 @@ td select {
     border-radius: 100vmin;
 }
 #roundControls button { margin-left: 8px; }
+#roundControls label { margin-left: 12px; font-size: 14px; }
+#volumeSlider { width: 120px; vertical-align: middle; }
 
 @media (max-width: 700px) {
     #menuLogo img { height: 72px; }

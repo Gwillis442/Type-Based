@@ -10,6 +10,12 @@ session_start();
 require_once("./hum_conn_no_login.php");
 ini_set('display_errors', 0);
 
+/*
+ * Loads one player's saved stats.
+ * conn - the database connection
+ * user_id - the player id
+ * return the stats row, or false
+ */
 function get_user_stats($conn, $user_id)
 {
     $query = '

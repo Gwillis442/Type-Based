@@ -7,6 +7,11 @@
  * Returns the MP3 names in one difficulty folder.
  */
 header("Content-Type: application/json");
+/*
+ * Reads one mode folder and returns its audio file names.
+ * mode - easy, medium, or hard
+ * return a JSON list of file names
+ */
 $mode = $_GET["mode"] ?? "easy";
 if (!in_array($mode, ["easy", "medium", "hard"], true)) {
     $mode = "easy";
