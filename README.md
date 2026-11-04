@@ -55,10 +55,9 @@ Stats
 - `CSS/` — layout and control styles
 - `Assets/` — images and audio used by the game
 
-## Future updates for version 3.0
+## Future updates for version 4.0
 - `Security` — Improve potential Security flaws related to the game.
-- `Server` — Have the potential to move the server locally or off the campus servers.
-- `Dictionary` — Source 5-letter dictionary words from American-English
+- `Grade-Based Dictionary Game` — Source vocabulary words from 1st-12th grade as well as common words one may encounter after 12th grade. And add it to a custom game that require player to type properly by copying Word-Parts of Speech-Meaning as well as repeating what was just learnt by typing without copying.
 ## Team
 Type-Based
 

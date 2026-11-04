@@ -128,6 +128,28 @@ require_once("./BackEnd/hum_conn_no_login.php");
                                 <option value="standard">Standard</option>
                                 <option value="music">Music</option>
                                 <option value="code">Code</option>
+                                <option value="dictionary">Dictionary</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="gradeRow" style="display:none">
+                        <td>
+                            <i class="ri-graduation-cap-line"></i>
+                            <span>Grade</span>
+                            <select name="grade" id="gradeSelect">
+                                <option value="1">1st grade</option>
+                                <option value="2">2nd grade</option>
+                                <option value="3">3rd grade</option>
+                                <option value="4">4th grade</option>
+                                <option value="5">5th grade</option>
+                                <option value="6">6th grade</option>
+                                <option value="7">7th grade</option>
+                                <option value="8">8th grade</option>
+                                <option value="9">9th grade</option>
+                                <option value="10">10th grade</option>
+                                <option value="11">11th grade</option>
+                                <option value="12">12th grade</option>
+                                <option value="after">Past 12th grade</option>
                             </select>
                         </td>
                     </tr>
@@ -301,6 +323,8 @@ require_once("./BackEnd/hum_conn_no_login.php");
             sound: true,
             music: true,
             history: true,
+            pack: 'standard',
+            grade: '1',
         };
 
         const user = {
@@ -354,11 +378,13 @@ require_once("./BackEnd/hum_conn_no_login.php");
             }
             document.getElementById("modeSelect").addEventListener("change", loadSongChoices);
             loadSongChoices();
+            toggleGradeRow();
 
             const settingsMapping = {
                 modeSelect: 'mode',
                 songSelect: 'song',
                 packSelect: 'pack',
+                gradeSelect: 'grade',
                 soundState: 'sound',
                 musicState: 'music',
                 historyState: 'history',
@@ -371,6 +397,7 @@ require_once("./BackEnd/hum_conn_no_login.php");
                     settings[settingKey] = id.includes("State") ? (this.value === "true") : this.value;
                     writeSettingsToLocalStorage(settingKey, settings[settingKey]);
                     if (settingKey === 'history') updateConfigButtonDisplay();
+                    if (settingKey === 'pack') toggleGradeRow();
                 });
             });
         }
@@ -393,6 +420,11 @@ require_once("./BackEnd/hum_conn_no_login.php");
          * value - the setting value
          * return nothing
          */
+        function toggleGradeRow() {
+            var pack = document.getElementById("packSelect").value;
+            document.getElementById("gradeRow").style.display = pack === "dictionary" ? "" : "none";
+        }
+
         function writeSettingsToLocalStorage(key, value) {
             const settingsObject = JSON.parse(localStorage.getItem('settingsObject')) || settings;
             settingsObject[key] = value;

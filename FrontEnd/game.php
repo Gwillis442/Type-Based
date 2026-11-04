@@ -86,6 +86,19 @@
 
 
 
+    <div id="dictionaryPanel" style="display:none; position:fixed; inset:0; background:#f2f3f5; z-index:18; align-items:center; justify-content:center;">
+        <div style="width:640px; max-width:92%; font-family:'Lexend Deca', sans-serif;">
+            <h2 id="dictGrade"></h2>
+            <p id="dictPass"></p>
+            <p id="dictShown" style="font-size:28px;"></p>
+            <p id="dictPrompt"></p>
+            <input id="dictInput" type="text" autocomplete="off" style="width:100%; font-size:22px; padding:8px;">
+            <p id="dictFeedback"></p>
+            <p>Words completed: <span id="dictDone">0</span> &nbsp; Accuracy: <span id="dictAccuracy">0</span>% &nbsp; Wrong keys: <span id="dictWrong">0</span></p>
+            <button type="button" onclick="exitDictionary()">Main menu</button>
+        </div>
+    </div>
+
     <div id="roundControls" style="position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:15;">
         <button id="pauseButton" onclick="togglePause()">Pause</button>
         <button id="restartButton" onclick="restartRound()">Restart</button>
@@ -310,6 +323,7 @@
         var keysDown = {};
         var streak = 0;
         var wordsCorrect = 0;
+        var wordsCompleted = 0;
         var feverActive = false;
 
 
@@ -405,6 +419,7 @@
             score = 0;
             streak = 0;
             wordsCorrect = 0;
+            wordsCompleted = 0;
             feverActive = false;
             squaresSent = 0;
             squaresCorrect = 0;
@@ -539,6 +554,14 @@
          * return nothing
          */
         function startGame() {
+            var saved = {};
+            try { saved = JSON.parse(localStorage.getItem("settingsObject") || "{}"); } catch (e) {}
+            if (saved.pack === "dictionary" || settings.pack === "dictionary") {
+                settings.pack = "dictionary";
+                settings.grade = saved.grade || settings.grade || "1";
+                startDictionary();
+                return;
+            }
             startMusic();
 
             document.getElementById('gameStartButton').style.display = "none";
@@ -676,6 +699,199 @@
          * event - the transition end event
          * return nothing
          */
+
+        var dictQueue = [];
+        var dictIndex = 0;
+        var dictStep = 0;
+        var dictCopied = {};
+        var dictExpected = "";
+        var dictPrev = "";
+
+        /*
+         * Starts Dictionary mode for the selected grade.
+         * return nothing
+         */
+        function startDictionary() {
+            document.getElementById("gameStartButton").style.display = "none";
+            document.getElementById("roundControls").style.display = "none";
+            var board = document.querySelector(".titleHPBar");
+            if (board) board.style.display = "none";
+            ["square1", "square2", "square3", "square4", "square5"].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) el.style.display = "none";
+            });
+            var word = document.getElementById("gameWord");
+            if (word) word.style.display = "none";
+            document.getElementById("dictionaryPanel").style.display = "flex";
+            var grade = settings.grade || "1";
+            var pack = (typeof dictionaryGrades !== "undefined") ? dictionaryGrades[grade] : [];
+            dictQueue = pack.slice();
+            for (var i = dictQueue.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var swap = dictQueue[i];
+                dictQueue[i] = dictQueue[j];
+                dictQueue[j] = swap;
+            }
+            dictIndex = 0;
+            dictCopied = {};
+            wordsCompleted = 0;
+            wrongPresses = 0;
+            squaresCorrect = 0;
+            document.getElementById("dictGrade").textContent = grade === "after" ? "Past 12th grade" : "Grade " + grade;
+            showDictItem();
+            document.getElementById("dictInput").focus();
+        }
+
+        /*
+         * Shows the current dictionary item.
+         * return nothing
+         */
+        function showDictItem() {
+            if (!dictQueue.length) return;
+            if (dictIndex >= dictQueue.length) dictIndex = 0;
+            var item = dictQueue[dictIndex];
+            var copied = !!dictCopied[item.word];
+            dictStep = 0;
+            document.getElementById("dictPass").textContent = copied ? "Recall" : "Copy";
+            if (copied) {
+                document.getElementById("dictShown").textContent = item.sentence || item.word;
+            } else {
+                document.getElementById("dictShown").textContent = item.word + "  ·  " + item.pos + "  ·  " + item.meaning;
+            }
+            document.getElementById("dictPrompt").textContent = copied ? "Type the part of speech" : "Type the word";
+            document.getElementById("dictFeedback").textContent = "";
+            dictExpected = copied ? item.pos : item.word;
+            dictPrev = "";
+            document.getElementById("dictInput").value = "";
+            updateDictStats();
+        }
+
+        /*
+         * Returns the string the player must type for this step.
+         * return the expected text
+         */
+        function currentDictTarget() {
+            var item = dictQueue[dictIndex];
+            var copied = !!dictCopied[item.word];
+            if (dictStep === 9) return "";
+            if (!copied) return [item.word, item.pos, item.meaning][dictStep] || "";
+            if (dictStep === 0) return item.pos;
+            return item.meaning;
+        }
+
+        /*
+         * Checks one dictionary answer and moves to the next step.
+         * return nothing
+         */
+
+        /*
+         * Counts a wrong letter as it is typed. Backspace does not remove the count.
+         * return nothing
+         */
+        function checkDictKey() {
+            if (dictStep === 9) return;
+            var input = document.getElementById("dictInput");
+            var now = input.value.toLowerCase();
+            var target = currentDictTarget().toLowerCase();
+            if (now.length > dictPrev.length) {
+                var added = now.slice(dictPrev.length);
+                for (var i = 0; i < added.length; i++) {
+                    var at = dictPrev.length + i;
+                    if (added[i] !== target[at]) {
+                        wrongPresses++;
+                        document.getElementById("dictFeedback").textContent = "Wrong key";
+                    } else {
+                        squaresCorrect++;
+                        document.getElementById("dictFeedback").textContent = "";
+                    }
+                }
+                updateDictStats();
+            }
+            dictPrev = now;
+            if (target && now === target) submitDict();
+        }
+
+        function submitDict() {
+            var item = dictQueue[dictIndex];
+            var typed = document.getElementById("dictInput").value.trim().toLowerCase();
+            var copied = !!dictCopied[item.word];
+            var expected = "";
+            var ok = false;
+            if (dictStep === 9) {
+                dictIndex++;
+                showDictItem();
+                return;
+            }
+            if (!copied) {
+                expected = [item.word, item.pos, item.meaning][dictStep];
+                ok = typed === expected.toLowerCase();
+            } else if (dictStep === 0) {
+                expected = item.pos;
+                ok = typed === item.pos.toLowerCase();
+            } else {
+                expected = item.keys.join(" or ");
+                ok = item.keys.some(function (key) { return typed.indexOf(key) !== -1; }) || typed === item.meaning.toLowerCase();
+            }
+            if (!ok) {
+                document.getElementById("dictFeedback").textContent = "Not quite. " + expected;
+                updateDictStats();
+                return;
+            }
+            dictStep++;
+            dictPrev = "";
+            document.getElementById("dictInput").value = "";
+            document.getElementById("dictFeedback").textContent = "";
+            if (!copied && dictStep < 3) {
+                document.getElementById("dictPrompt").textContent = ["Type the word", "Type the part of speech", "Type the meaning"][dictStep];
+                dictPrev = "";
+                return;
+            }
+            if (copied && dictStep < 2) {
+                document.getElementById("dictPrompt").textContent = "Type a short meaning";
+                dictPrev = "";
+                return;
+            }
+            if (!copied) {
+                dictCopied[item.word] = true;
+                document.getElementById("dictPass").textContent = "Context";
+                document.getElementById("dictShown").textContent = item.sentence || item.word;
+                document.getElementById("dictPrompt").textContent = "Read the sentence, then press Enter";
+                document.getElementById("dictFeedback").textContent = "";
+                dictStep = 9;
+                return;
+            } else {
+                wordsCompleted++;
+                dictQueue.push(dictQueue.splice(dictIndex, 1)[0]);
+            }
+            dictIndex++;
+            showDictItem();
+        }
+
+        /*
+         * Updates the dictionary counters.
+         * return nothing
+         */
+        function updateDictStats() {
+            updateAccuracy();
+            document.getElementById("dictDone").textContent = wordsCompleted;
+            document.getElementById("dictAccuracy").textContent = userAccuracy;
+            document.getElementById("dictWrong").textContent = wrongPresses;
+        }
+
+        /*
+         * Leaves Dictionary mode and opens the menu.
+         * return nothing
+         */
+        function exitDictionary() {
+            window.location.href = "../Index.php";
+        }
+
+        document.getElementById("dictInput").addEventListener("input", checkDictKey);
+        document.addEventListener("keydown", function (event) {
+            if (document.getElementById("dictionaryPanel").style.display !== "flex") return;
+            if (event.key === "Enter") submitDict();
+        });
+
         function checkForWin(event) {
             // Ensure userInputs is accessible and that the game logic correctly checks if the user won
             if (event.propertyName === "left") {
@@ -775,6 +991,7 @@
                 mode: difficulty,
                 score: score,
                 accuracy: userAccuracy,
+                wordsCompleted: wordsCompleted,
                 wrongKeys: wrongPresses
             }));
         }
@@ -886,6 +1103,7 @@
          */
         function userWins() {
             wordsCorrect++;
+            wordsCompleted++;
             feverActive = wordsCorrect >= 3;
             setTimeout(function () {
                 document.getElementById('gameWord').style.animation = "bounce 1s 1";
@@ -962,6 +1180,7 @@
     <script src="five-letter-words.js"></script>
     <script src="english-five.js"></script>
     <script src="word-packs.js"></script>
+    <script src="dictionary.js"></script>
 </body>
 
 </html>

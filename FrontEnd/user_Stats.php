@@ -188,6 +188,13 @@ ini_set('display_errors', 0);
                         </tr>
                         <tr>
                             <td style="display: flex; align-items: center;position:relative">
+                                <i class="ri-font-size" style="margin-right: 5px;"></i>
+                                <span style="margin-right: 10px;">Words Completed</span>
+                                <h2 style="margin: 0; font-size: 20px; position: absolute; right: 0; margin-right: 20px;" id="wordsCompletedValue">0</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="display: flex; align-items: center;position:relative">
                                 <i class="ri-close-circle-line" style="margin-right: 5px;"></i>
                                 <span style="margin-right: 10px;">Wrong Keys Pressed</span>
                                 <h2 style="margin: 0; font-size: 20px; position: absolute; right: 0; margin-right: 20px;" id="wrongKeysValue">0</h2>
@@ -255,6 +262,8 @@ ini_set('display_errors', 0);
             if (high) high.textContent = round.score;
             var accuracy = document.getElementById("accuracyValue");
             if (accuracy) accuracy.textContent = round.accuracy + "%";
+            var words = document.getElementById("wordsCompletedValue");
+            if (words) words.textContent = round.wordsCompleted || 0;
             var wrong = document.getElementById("wrongKeysValue");
             if (wrong) wrong.textContent = round.wrongKeys || 0;
         }
