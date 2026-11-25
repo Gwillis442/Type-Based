@@ -78,6 +78,9 @@
             <p>Mode: <span id="summaryMode"></span></p>
             <p>Score: <span id="summaryScore"></span></p>
             <p>Accuracy: <span id="summaryAccuracy"></span>%</p>
+            <p id="summaryWords" style="display:none"></p>
+            <p id="summaryWrong" style="display:none"></p>
+            <p id="summaryMissed" style="display:none"></p>
             <button id="summaryContinue" onclick="playAgain()">Play again</button>
             <button id="summaryMenu" onclick="backToMenu()">Main menu</button>
             <button id="summaryStats" onclick="viewStats()">View stats</button>
@@ -102,6 +105,7 @@
     <div id="roundControls" style="position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:15;">
         <button id="pauseButton" onclick="togglePause()">Pause</button>
         <button id="restartButton" onclick="restartRound()">Restart</button>
+        <button id="stopButton" onclick="stopAdaptive()" style="display:none">Stop</button>
         <label for="volumeSlider">Vol</label>
         <input id="volumeSlider" type="range" min="0" max="100" value="80">
     </div>
@@ -234,6 +238,10 @@
                     settings.mode = "Hard";
                     squareTransitionProperty = "left 2s linear";
                     squareBPMProperty = 180;
+                } else if (settings.mode == "adaptive") {
+                    settings.mode = "Adaptive";
+                    squareTransitionProperty = "left 5s linear";
+                    squareBPMProperty = 120;
                 }
 
                 if (settings.song == undefined) {
@@ -305,6 +313,7 @@
                 selected_word = pool[Math.floor(Math.random() * pool.length)];
                 tries++;
             }
+            currentWord = selected_word;
             recentWords.push(selected_word);
             if (recentWords.length > 12) recentWords.shift();
             document.getElementById("letter1").innerHTML = selected_word[0].toUpperCase();
@@ -325,6 +334,10 @@
         var wordsCorrect = 0;
         var wordsCompleted = 0;
         var feverActive = false;
+        var adaptiveSeconds = 5;
+        var missedWords = [];
+        var currentWord = "";
+        var adaptiveLive = false;
 
 
         var toneContext = null;
@@ -421,6 +434,7 @@
             wordsCorrect = 0;
             wordsCompleted = 0;
             feverActive = false;
+            adaptiveLive = false;
             squaresSent = 0;
             squaresCorrect = 0;
             wrongPresses = 0;
@@ -464,11 +478,45 @@
          * Returns easy, medium, or hard from the selected mode.
          * return the mode folder name
          */
+        var songBand = "";
+
         function songModeName() {
+            if (settings.mode === "Adaptive") {
+                if (adaptiveSeconds <= 2.5) return "hard";
+                if (adaptiveSeconds <= 4) return "medium";
+                return "easy";
+            }
             var mode = (settings.mode || "easy").toLowerCase();
             if (mode.indexOf("hard") !== -1) return "hard";
             if (mode.indexOf("med") !== -1) return "medium";
             return "easy";
+        }
+
+        /*
+         * Switches the song folder when adaptive speed crosses a band.
+         * return nothing
+         */
+        function syncSongBand() {
+            if (settings.mode !== "Adaptive" || !settings.music) return;
+            var band = songModeName();
+            if (band === songBand) return;
+            songBand = band;
+            var request = new XMLHttpRequest();
+            request.open("GET", "../BackEnd/list_songs.php?mode=" + band, true);
+            request.onreadystatechange = function () {
+                if (request.readyState !== 4 || request.status !== 200) return;
+                var songs = JSON.parse(request.responseText || "[]");
+                for (var i = songs.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var swap = songs[i];
+                    songs[i] = songs[j];
+                    songs[j] = swap;
+                }
+                currentSongList = songs;
+                songIndex = 0;
+                playSongAt(0);
+            };
+            request.send();
         }
 
         /*
@@ -565,6 +613,18 @@
             startMusic();
 
             document.getElementById('gameStartButton').style.display = "none";
+            if (settings.mode === "Adaptive") {
+                if (!adaptiveLive) {
+                    adaptiveSeconds = 5;
+                    missedWords = [];
+                    adaptiveLive = true;
+                }
+                applyAdaptiveSpeed();
+                var hearts = document.querySelector(".titleHPBar");
+                if (hearts) hearts.style.display = "none";
+                var stopButton = document.getElementById("stopButton");
+                if (stopButton) stopButton.style.display = "";
+            }
 
             // Clear previous states
             userInputs = {}; // Reset user inputs for the new game
@@ -925,6 +985,44 @@
             document.getElementById("summaryMode").textContent = settings.mode || "Easy";
             document.getElementById("summaryScore").textContent = score;
             document.getElementById("summaryAccuracy").textContent = userAccuracy;
+            var wordsLine = document.getElementById("summaryWords");
+            var wrongLine = document.getElementById("summaryWrong");
+            var missedLine = document.getElementById("summaryMissed");
+            if (settings.mode === "Adaptive") {
+                wordsLine.style.display = "";
+                wordsLine.textContent = "Words completed: " + wordsCompleted;
+                wrongLine.style.display = "";
+                wrongLine.textContent = "Wrong keys: " + wrongPresses;
+                missedLine.style.display = "";
+                missedLine.textContent = missedWords.length ? "Missed words: " + missedWords.join(", ") : "Missed words: none";
+            } else {
+                wordsLine.style.display = "none";
+                wrongLine.style.display = "none";
+                missedLine.style.display = "none";
+            }
+        }
+
+        /*
+         * Sets the fall time from the adaptive speed.
+         * return nothing
+         */
+        function applyAdaptiveSpeed() {
+            squareTransitionProperty = "left " + adaptiveSeconds.toFixed(1) + "s linear";
+            squareBPMProperty = Math.max(80, Math.round(120 * (5 / adaptiveSeconds)));
+            syncSongBand();
+        }
+
+        /*
+         * Ends an adaptive run and shows the record.
+         * return nothing
+         */
+        function stopAdaptive() {
+            adaptiveLive = false;
+            if (roundTimer) { clearInterval(roundTimer); roundTimer = null; }
+            updateAccuracy();
+            saveGuestRound();
+            fillRoundSummary();
+            document.getElementById("roundSummary").style.display = "flex";
         }
 
 
@@ -1055,6 +1153,16 @@
          * return nothing
          */
         function userLoses() {
+    if (settings.mode === "Adaptive") {
+        playTone(180, 0.16);
+        markNextLetter(0);
+        if (currentWord && missedWords.indexOf(currentWord) === -1) missedWords.push(currentWord);
+        adaptiveSeconds = Math.min(6, adaptiveSeconds + 0.4);
+        applyAdaptiveSpeed();
+        updateAccuracy();
+        setTimeout(resetWord, 800);
+        return;
+    }
     playTone(180, 0.16);
     markNextLetter(0);
     wordsCorrect = 0;
@@ -1105,6 +1213,10 @@
             wordsCorrect++;
             wordsCompleted++;
             feverActive = wordsCorrect >= 3;
+            if (settings.mode === "Adaptive") {
+                adaptiveSeconds = Math.max(1.2, adaptiveSeconds - 0.2);
+                applyAdaptiveSpeed();
+            }
             setTimeout(function () {
                 document.getElementById('gameWord').style.animation = "bounce 1s 1";
                 document.getElementById('gameWord').style.color = "green";

@@ -108,6 +108,7 @@ require_once("./BackEnd/hum_conn_no_login.php");
                                 <option value="easy">Easy</option>
                                 <option value="med">Medium</option>
                                 <option value="hard">Hard</option>
+                                <option value="adaptive">Adaptive</option>
                             </select>
                         </td>
                     </tr>
